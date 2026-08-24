@@ -182,34 +182,32 @@ GEMINI_API_KEY = (os.environ.get('GEMINI_API_KEY') or os.environ.get('GOOGLE_API
 # Smart Free-First → Paid Fallback Tracker
 _gemini_free_exhausted = False
 
-def gemini_enrich_batch(companies_with_context, retries=3):
-    global _gemini_free_exhausted
+def gemini_enrich_batch(companies_with_context, max_retries=4):
     if not GEMINI_API_KEY or not companies_with_context:
         return {}
 
-    prompt = f'''You are an institutional private equity & corporate intelligence research engine.
-Given the list of entities below with their industry context, provide accurate corporate details.
-
-RULES FOR MAXIMUM ACCURACY:
-1. OPERATING BRAND RESOLUTION: Resolve underlying OPERATING BRAND or PARENT SPONSOR and attach official website starting with https://.
-2. If entity is an SPV or unlisted holding company with no domain, set website to 'Not Found (Holding / SPV Entity)'.
+    prompt = f'''You are an institutional financial & private equity intelligence research engine.
+For each entity below, identify the primary operating business or parent corporation and provide its official active corporate website (https://...).
+Rules:
+1. OPERATING BRAND RESOLUTION: Find the true operating corporate website for major brands (e.g. United Airlines -> https://www.united.com, Biffa Group -> https://www.biffa.co.uk, Raiffeisen -> https://www.rbinternational.com, Wanda -> https://www.wanda-group.com, Sompo -> https://www.sompo-hd.com, Vossloh -> https://www.vossloh.com, Cooper-Standard -> https://www.cooperstandard.com, Venture Global -> https://www.venturegloballng.com).
+2. If entity is a purely obscure shell SPV with zero website, set website to 'Not Found (Holding / SPV Entity)'.
 
 Entities:
 {json.dumps(companies_with_context, indent=2)}
 
-Return a valid JSON Object with a "results" array matching schema with fields: company_name, website, executive, pe_sponsor, ownership_type, phone, email, city, state, zip, country, address, gainpro.
+Return a valid JSON Object with a "results" array matching fields: company_name, website, executive, pe_sponsor, ownership_type, phone, email, city, state, zip, country, address, gainpro.
 '''
 
-    # Active High-Speed 2026 Endpoints
     models_to_try = ['gemini-3.5-flash-lite', 'gemini-3.1-flash-lite', 'gemini-3.6-flash', 'gemini-flash-latest']
 
-    for model in models_to_try:
+    for attempt in range(max_retries):
+        model = models_to_try[attempt % len(models_to_try)]
         url = f'https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={GEMINI_API_KEY}'
         req_body = {'contents': [{'parts': [{'text': prompt}]}], 'generationConfig': {'responseMimeType': 'application/json'}}
 
         try:
             req = urllib.request.Request(url, data=json.dumps(req_body).encode('utf-8'), headers={'Content-Type': 'application/json'})
-            with urllib.request.urlopen(req, timeout=12) as resp:
+            with urllib.request.urlopen(req, timeout=25) as resp:
                 data = json.loads(resp.read().decode('utf-8'))
                 text = data['candidates'][0]['content']['parts'][0]['text']
                 clean_text = re.sub(r'^```json\s*|\s*```$', '', text.strip(), flags=re.MULTILINE)
@@ -222,8 +220,13 @@ Return a valid JSON Object with a "results" array matching schema with fields: c
                         res_dict[c_name] = item
                 if res_dict:
                     return res_dict
-        except Exception as ex:
-            time.sleep(0.5)
+        except urllib.error.HTTPError as he:
+            if he.code == 429:
+                time.sleep(1.5 * (attempt + 1))
+            else:
+                time.sleep(0.8)
+        except Exception:
+            time.sleep(0.8)
     return {}
 
 class CompanyFramework:
@@ -316,9 +319,9 @@ class CompanyFramework:
             if GEMINI_API_KEY:
                 print(f"[Gemini AI] Querying AI engine in parallel for {len(to_enrich_gemini)} entity records...", flush=True)
                 from concurrent.futures import ThreadPoolExecutor
-                chunk_size = 6
+                chunk_size = 20
                 chunks = [to_enrich_gemini[i:i + chunk_size] for i in range(0, len(to_enrich_gemini), chunk_size)]
-                with ThreadPoolExecutor(max_workers=12) as g_executor:
+                with ThreadPoolExecutor(max_workers=6) as g_executor:
                     batch_results = list(g_executor.map(gemini_enrich_batch, chunks))
                     for b in batch_results:
                         if b:
