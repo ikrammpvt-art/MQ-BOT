@@ -200,14 +200,8 @@ Entities:
 Return a valid JSON Object with a "results" array matching schema with fields: company_name, website, executive, pe_sponsor, ownership_type, phone, email, city, state, zip, country, address, gainpro.
 '''
 
-    # Strategy: FREE models first → PAID models if free is rate-limited
-    free_models = ['gemini-2.0-flash-lite', 'gemini-2.0-flash']
-    paid_models = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-pro']
-
-    if _gemini_free_exhausted:
-        models_to_try = paid_models
-    else:
-        models_to_try = free_models + paid_models
+    # Active High-Speed 2026 Endpoints
+    models_to_try = ['gemini-3.5-flash-lite', 'gemini-3.1-flash-lite', 'gemini-3.6-flash', 'gemini-flash-latest']
 
     for model in models_to_try:
         url = f'https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={GEMINI_API_KEY}'
@@ -215,7 +209,7 @@ Return a valid JSON Object with a "results" array matching schema with fields: c
 
         try:
             req = urllib.request.Request(url, data=json.dumps(req_body).encode('utf-8'), headers={'Content-Type': 'application/json'})
-            with urllib.request.urlopen(req, timeout=20) as resp:
+            with urllib.request.urlopen(req, timeout=12) as resp:
                 data = json.loads(resp.read().decode('utf-8'))
                 text = data['candidates'][0]['content']['parts'][0]['text']
                 clean_text = re.sub(r'^```json\s*|\s*```$', '', text.strip(), flags=re.MULTILINE)
@@ -228,18 +222,8 @@ Return a valid JSON Object with a "results" array matching schema with fields: c
                         res_dict[c_name] = item
                 if res_dict:
                     return res_dict
-        except urllib.error.HTTPError as e:
-            if e.code == 429:
-                if model in free_models:
-                    _gemini_free_exhausted = True
-                    print(f"      [Gemini] Free tier limit hit on {model}, auto-switching to paid tier...", flush=True)
-                    continue
-                else:
-                    time.sleep(2.0)
-                    continue
-            time.sleep(1.0)
-        except Exception:
-            time.sleep(1.0)
+        except Exception as ex:
+            time.sleep(0.5)
     return {}
 
 class CompanyFramework:
@@ -330,12 +314,15 @@ class CompanyFramework:
         if to_enrich_gemini:
             gemini_res = {}
             if GEMINI_API_KEY:
-                print(f"[Gemini AI] Querying AI engine for {len(to_enrich_gemini)} entity records...", flush=True)
-                chunk_size = 8
+                print(f"[Gemini AI] Querying AI engine in parallel for {len(to_enrich_gemini)} entity records...", flush=True)
+                from concurrent.futures import ThreadPoolExecutor
+                chunk_size = 6
                 chunks = [to_enrich_gemini[i:i + chunk_size] for i in range(0, len(to_enrich_gemini), chunk_size)]
-                for chunk in chunks:
-                    res_b = gemini_enrich_batch(chunk)
-                    gemini_res.update(res_b)
+                with ThreadPoolExecutor(max_workers=12) as g_executor:
+                    batch_results = list(g_executor.map(gemini_enrich_batch, chunks))
+                    for b in batch_results:
+                        if b:
+                            gemini_res.update(b)
 
             print(f"[Live Scraper] Resolving remaining unmapped entities via Multi-Source Scraper (Parallel Accelerated)...", flush=True)
             from concurrent.futures import ThreadPoolExecutor
