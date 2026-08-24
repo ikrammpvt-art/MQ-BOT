@@ -179,7 +179,11 @@ def free_multi_source_scrape(company_name, industry_context='Commercial Enterpri
 
 GEMINI_API_KEY = (os.environ.get('GEMINI_API_KEY') or os.environ.get('GOOGLE_API_KEY') or '').strip()
 
-def gemini_enrich_batch(companies_with_context, retries=2):
+# Smart Free-First → Paid Fallback Tracker
+_gemini_free_exhausted = False
+
+def gemini_enrich_batch(companies_with_context, retries=3):
+    global _gemini_free_exhausted
     if not GEMINI_API_KEY or not companies_with_context:
         return {}
 
@@ -196,16 +200,22 @@ Entities:
 Return a valid JSON Object with a "results" array matching schema with fields: company_name, website, executive, pe_sponsor, ownership_type, phone, email, city, state, zip, country, address, gainpro.
 '''
 
-    models = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-pro']
+    # Strategy: FREE models first → PAID models if free is rate-limited
+    free_models = ['gemini-2.0-flash-lite', 'gemini-2.0-flash']
+    paid_models = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-pro']
 
-    for attempt in range(retries):
-        model = models[attempt % len(models)]
+    if _gemini_free_exhausted:
+        models_to_try = paid_models
+    else:
+        models_to_try = free_models + paid_models
+
+    for model in models_to_try:
         url = f'https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={GEMINI_API_KEY}'
         req_body = {'contents': [{'parts': [{'text': prompt}]}], 'generationConfig': {'responseMimeType': 'application/json'}}
 
         try:
             req = urllib.request.Request(url, data=json.dumps(req_body).encode('utf-8'), headers={'Content-Type': 'application/json'})
-            with urllib.request.urlopen(req, timeout=15) as resp:
+            with urllib.request.urlopen(req, timeout=20) as resp:
                 data = json.loads(resp.read().decode('utf-8'))
                 text = data['candidates'][0]['content']['parts'][0]['text']
                 clean_text = re.sub(r'^```json\s*|\s*```$', '', text.strip(), flags=re.MULTILINE)
@@ -214,10 +224,20 @@ Return a valid JSON Object with a "results" array matching schema with fields: c
                 for item in parsed.get('results', []):
                     c_name = item.get('company_name')
                     if c_name:
-                        item['status_flag'] = 'Verified (Gemini AI)'
+                        item['status_flag'] = f'Verified (Gemini AI - {model})'
                         res_dict[c_name] = item
                 if res_dict:
                     return res_dict
+        except urllib.error.HTTPError as e:
+            if e.code == 429:
+                if model in free_models:
+                    _gemini_free_exhausted = True
+                    print(f"      [Gemini] Free tier limit hit on {model}, auto-switching to paid tier...", flush=True)
+                    continue
+                else:
+                    time.sleep(2.0)
+                    continue
+            time.sleep(1.0)
         except Exception:
             time.sleep(1.0)
     return {}
