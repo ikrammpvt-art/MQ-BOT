@@ -444,19 +444,22 @@ def start_telegram_bot_daemon():
     token = os.environ.get("TELEGRAM_BOT_TOKEN", "8858180700:AAG8wT-nFBHTs907QQbl6R63rm8mDDslxxc").strip()
     if token:
         import threading
-        try:
-            from telegram_bot import bot
-            if bot:
-                print("🚀 [Telegram Bot] Starting polling thread in background for Railway...", flush=True)
+        def _poll_worker():
+            import time
+            time.sleep(4)
+            while True:
                 try:
-                    bot.remove_webhook()
-                except Exception:
-                    pass
-                t = threading.Thread(target=lambda: bot.infinity_polling(timeout=15, long_polling_timeout=10, skip_pending=True), daemon=True)
-                t.start()
-                print("✅ [Telegram Bot] Background thread active.", flush=True)
-        except Exception as e:
-            print(f"⚠️ [Telegram Bot] Error starting background bot: {e}", flush=True)
+                    from telegram_bot import bot
+                    if bot:
+                        bot.remove_webhook()
+                        bot.infinity_polling(timeout=15, long_polling_timeout=10, skip_pending=True)
+                except Exception as e:
+                    print(f"⚠️ [Telegram Bot Daemon] Re-acquiring polling lock in 5s: {e}", flush=True)
+                    time.sleep(5)
+
+        t = threading.Thread(target=_poll_worker, daemon=True)
+        t.start()
+        print("🚀 [Telegram Bot] Background polling daemon thread launched.", flush=True)
     else:
         print("ℹ️ TELEGRAM_BOT_TOKEN not set. Running Web Portal only.", flush=True)
 
