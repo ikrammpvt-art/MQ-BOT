@@ -12,7 +12,7 @@ from hermes_agent import HermesAgent
 from company_framework import CompanyFramework
 
 # Load BOT_TOKEN from environment variable or user config
-BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "8770558776:AAGz_ZZ5_frsHuL8KFefB0-AtFkYbnGT1GE").strip()
+BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "8858180700:AAG8wT-nFBHTs907QQbl6R63rm8mDDslxxc").strip()
 
 if not BOT_TOKEN:
     print("\n⚠️ WARNING: TELEGRAM_BOT_TOKEN is not set.")
