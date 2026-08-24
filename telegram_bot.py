@@ -70,6 +70,7 @@ if bot:
             fw.process_and_enrich()
 
             output_base = os.path.join("/tmp", f"milund_enriched_{int(time.time())}")
+            print(f"[Telegram Bot] Exporting enriched files to {output_base}...", flush=True)
             csv_out, xlsx_out = fw.export(output_base)
 
             df = fw.processed_df
@@ -86,31 +87,45 @@ if bot:
                 "👇 *Here are your enriched output files:* "
             )
 
-            bot.edit_message_text(summary_text, chat_id=status_msg.chat.id, message_id=status_msg.message_id, parse_mode="Markdown")
+            print("[Telegram Bot] Editing status message...", flush=True)
+            try:
+                bot.edit_message_text(summary_text, chat_id=status_msg.chat.id, message_id=status_msg.message_id, parse_mode="Markdown")
+            except Exception as e_edit:
+                print(f"[Telegram Bot] Notice on edit_message_text: {e_edit}", flush=True)
 
             base_clean_name = os.path.splitext(doc_name)[0]
 
             # Send Enriched CSV File
+            print(f"[Telegram Bot] Sending CSV: {csv_out}...", flush=True)
             with open(csv_out, 'rb') as f_csv:
                 bot.send_document(
                     message.chat.id, 
                     f_csv, 
                     visible_file_name=f"milund_enriched_{base_clean_name}.csv",
-                    caption="🍏 *Apple Numbers Compatible CSV (Hermes Enriched)*"
+                    caption="🍏 *Apple Numbers Compatible CSV (Hermes Enriched)*",
+                    parse_mode="Markdown"
                 )
 
             # Send Enriched XLSX File
+            print(f"[Telegram Bot] Sending XLSX: {xlsx_out}...", flush=True)
             with open(xlsx_out, 'rb') as f_xlsx:
                 bot.send_document(
                     message.chat.id, 
                     f_xlsx, 
                     visible_file_name=f"milund_enriched_{base_clean_name}.xlsx",
-                    caption="📊 *Clean Excel Workbook (.xlsx)*"
+                    caption="📊 *Clean Excel Workbook (.xlsx)*",
+                    parse_mode="Markdown"
                 )
+            print("[Telegram Bot] ✅ Enriched files successfully sent back to user!", flush=True)
 
         except Exception as e:
-            print(f"Error handling document: {e}")
-            bot.reply_to(message, f"❌ Error processing document: {str(e)}")
+            print(f"❌ Error handling document: {e}", flush=True)
+            import traceback
+            traceback.print_exc()
+            try:
+                bot.reply_to(message, f"❌ Error processing document: {str(e)}")
+            except Exception:
+                pass
 
 if __name__ == '__main__':
     if bot:
