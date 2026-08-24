@@ -337,16 +337,26 @@ class CompanyFramework:
                     res_b = gemini_enrich_batch(chunk)
                     gemini_res.update(res_b)
 
-            print(f"[Live Scraper] Resolving remaining unmapped entities via Multi-Source Scraper...", flush=True)
+            print(f"[Live Scraper] Resolving remaining unmapped entities via Multi-Source Scraper (Parallel Accelerated)...", flush=True)
+            from concurrent.futures import ThreadPoolExecutor
+            
+            missing_items = [item for item in to_enrich_gemini if item["company_name"] not in gemini_res]
             for item in to_enrich_gemini:
                 c_name = item["company_name"]
                 if c_name in gemini_res:
                     enriched_data = gemini_res[c_name]
-                else:
-                    enriched_data = free_multi_source_scrape(c_name, item["industry_context"])
-                
-                lookup_table[c_name] = enriched_data
-                save_cached_company(c_name, enriched_data)
+                    lookup_table[c_name] = enriched_data
+                    save_cached_company(c_name, enriched_data)
+
+            if missing_items:
+                def _fetch_single(it):
+                    return it["company_name"], free_multi_source_scrape(it["company_name"], it["industry_context"])
+
+                with ThreadPoolExecutor(max_workers=25) as executor:
+                    scraper_results = list(executor.map(_fetch_single, missing_items))
+                    for c_name, enriched_data in scraper_results:
+                        lookup_table[c_name] = enriched_data
+                        save_cached_company(c_name, enriched_data)
 
         def get_field(company_val, key, default_val='Not Found'):
             rec = lookup_table.get(company_val)
