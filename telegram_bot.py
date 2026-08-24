@@ -114,12 +114,14 @@ if bot:
 
 if __name__ == '__main__':
     if bot:
-        print("🚀 Telegram Bot with Hermes AI Agent is LIVE and polling for documents...")
-        try:
-            bot.remove_webhook()
-            time.sleep(1)
-        except Exception:
-            pass
-        bot.infinity_polling(timeout=20, long_polling_timeout=10, skip_pending=True)
+        print("🚀 Telegram Bot with Hermes AI Agent is LIVE and polling for documents...", flush=True)
+        while True:
+            try:
+                bot.remove_webhook()
+                time.sleep(2)
+                bot.infinity_polling(timeout=15, long_polling_timeout=10, skip_pending=True)
+            except Exception as ex:
+                print(f"⚠️ Telegram Polling notice: {ex}. Re-acquiring polling lock in 5s...", flush=True)
+                time.sleep(5)
     else:
         print("Please set TELEGRAM_BOT_TOKEN environment variable to start.")
