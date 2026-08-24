@@ -1,0 +1,8 @@
+streamlit
+pandas
+openpyxl
+flask
+requests
+matplotlib
+reportlab
+pyTelegramBotAPI
