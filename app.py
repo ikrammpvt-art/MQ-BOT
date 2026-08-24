@@ -411,6 +411,22 @@ def upload_file():
 def run_default():
     global latest_df, latest_unique_df
     filepath = os.path.join(BASE_DIR, 'Data - 6k.xlsx')
+    if not os.path.exists(filepath):
+        demo_companies = [
+            {"porfolio_company": "United Airlines Hldgs Inc.", "sic": "4512", "SIC Result": "Airlines"},
+            {"porfolio_company": "Biffa Group", "sic": "4953", "SIC Result": "Refuse Systems"},
+            {"porfolio_company": "Roblox Corp.", "sic": "7372", "SIC Result": "Prepackaged Software"},
+            {"porfolio_company": "Indofood Intl Finance LTD", "sic": "2098", "SIC Result": "Food & Beverages"},
+            {"porfolio_company": "Bach Bidco S.P.A.", "sic": "2621", "SIC Result": "Paper & Packaging"},
+            {"porfolio_company": "BCP V Modular Services Finance PLC", "sic": "7359", "SIC Result": "Modular Buildings"},
+            {"porfolio_company": "Wanda Group", "sic": "6798", "SIC Result": "Real Estate"},
+            {"porfolio_company": "Vossloh AG", "sic": "3312", "SIC Result": "Rail Infrastructure"},
+            {"porfolio_company": "Raiffeisen Bank", "sic": "6021", "SIC Result": "Commercial Banking"}
+        ]
+        demo_df = pd.DataFrame(demo_companies)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], 'demo_dataset.xlsx')
+        demo_df.to_excel(filepath, index=False)
+
     fw = CompanyFramework(filepath)
     fw.load_data()
     fw.detect_anomalies()
