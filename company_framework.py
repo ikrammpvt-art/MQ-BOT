@@ -379,6 +379,13 @@ class CompanyFramework:
         self.processed_df['Verified_GainPro_URL'] = self.processed_df[comp_col].apply(lambda c: get_field(c, 'gainpro', f"https://app.gain.pro/search?q={urllib.parse.quote(str(c))}"))
         self.processed_df['Original_Link_Status'] = self.processed_df[comp_col].apply(lambda c: get_field(c, 'status_flag', 'Verified Correct'))
 
+        # 4. Tier 4: Hermes AI Watchdog Real-Time Quality Supervisor & Auto-Healer
+        try:
+            from hermes_watchdog import HermesWatchdog
+            self.processed_df = HermesWatchdog.inspect_and_heal(self.processed_df, comp_col, ind_col, GEMINI_API_KEY)
+        except Exception as e_watchdog:
+            print(f"[Hermes Watchdog Notice] {e_watchdog}", flush=True)
+
         print("      Enrichment Complete. All columns attached cleanly.", flush=True)
 
     def export(self, output_basepath):
