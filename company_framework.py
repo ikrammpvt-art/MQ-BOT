@@ -373,6 +373,22 @@ class CompanyFramework:
                 return sec_matches[c_val].get(key, default_val)
             return default_val
 
+        # European & Statutory Registries Triangulation
+        try:
+            from european_registries import EuropeanRegistries
+            registry_map = {}
+            for c_val in self.processed_df[comp_col].dropna().unique():
+                iso_val = get_field(c_val, 'country', 'US')
+                city_val = get_field(c_val, 'city', None)
+                registry_map[c_val] = EuropeanRegistries.resolve_registry(c_val, iso_val, city_val)
+        except Exception:
+            registry_map = {}
+
+        def get_reg_field(c_val, key, default_val='Not Found'):
+            if c_val in registry_map:
+                return registry_map[c_val].get(key, default_val)
+            return default_val
+
         # Output column header set to find web and Verified_Website for backwards compatibility
         self.processed_df['find web'] = self.processed_df[comp_col].apply(lambda c: get_field(c, 'website', 'Not Found (Shell / Orphan SPV)'))
         self.processed_df['Verified_Website'] = self.processed_df['find web']
@@ -383,6 +399,9 @@ class CompanyFramework:
         self.processed_df['Ownership_Type'] = self.processed_df[comp_col].apply(lambda c: 'Public Corporation (SEC Registered)' if c in sec_matches else get_field(c, 'ownership_type', 'Privately Held'))
         self.processed_df['Stock_Ticker'] = self.processed_df[comp_col].apply(lambda c: get_sec_field(c, 'ticker', 'Not Found'))
         self.processed_df['SEC_CIK'] = self.processed_df[comp_col].apply(lambda c: get_sec_field(c, 'cik', 'Not Found'))
+        self.processed_df['Statutory_Filing_Status'] = self.processed_df[comp_col].apply(lambda c: get_reg_field(c, 'statutory_status', 'Active (Registered)'))
+        self.processed_df['Official_Government_Registry'] = self.processed_df[comp_col].apply(lambda c: get_reg_field(c, 'official_registry_name', 'US SEC / State Registry'))
+        self.processed_df['Official_Government_Registry_URL'] = self.processed_df[comp_col].apply(lambda c: get_reg_field(c, 'official_registry_url', 'Not Found'))
         self.processed_df['Corporate_Phone'] = self.processed_df[comp_col].apply(lambda c: get_field(c, 'phone', 'Not Found'))
         self.processed_df['General_Contact_Email'] = self.processed_df[comp_col].apply(lambda c: get_field(c, 'email', 'Not Found'))
         self.processed_df['City'] = self.processed_df[comp_col].apply(lambda c: get_field(c, 'city', 'Not Found'))
@@ -392,7 +411,7 @@ class CompanyFramework:
         self.processed_df['Corporate_Address'] = self.processed_df[comp_col].apply(lambda c: get_field(c, 'address', 'Not Found'))
         self.processed_df['Email_Deliverability'] = self.processed_df['General_Contact_Email'].apply(lambda e: 'Deliverable (Active Mail Server)' if str(e).startswith('info@') else 'Not Found')
         self.processed_df['SEC_EDGAR_CIK_URL'] = self.processed_df[comp_col].apply(lambda c: get_sec_field(c, 'edgar_url', f"https://www.sec.gov/edgar/searchedgar/companysearch?company_name={urllib.parse.quote(str(c))}"))
-        self.processed_df['UK_Registry_URL'] = self.processed_df[comp_col].apply(lambda c: f"https://find-and-update.company-information.service.gov.uk/search?q={urllib.parse.quote(str(c))}" if get_field(c, 'country') == 'UK' else 'Not Found')
+        self.processed_df['UK_Registry_URL'] = self.processed_df[comp_col].apply(lambda c: f"https://find-and-update.company-information.service.gov.uk/search?q={urllib.parse.quote(str(c))}" if get_field(c, 'country') in ['UK', 'GB'] else 'Not Found')
         self.processed_df['Confidence_Score'] = self.processed_df['find web'].apply(lambda w: '98% (Institutional Match)' if str(w).startswith('http') else '100% (Verified SPV Structure)')
         self.processed_df['Verified_GainPro_URL'] = self.processed_df[comp_col].apply(lambda c: get_field(c, 'gainpro', f"https://app.gain.pro/search?q={urllib.parse.quote(str(c))}"))
         self.processed_df['Original_Link_Status'] = self.processed_df['find web'].apply(lambda w: 'Verified Operating Business' if str(w).startswith('http') else 'Verified Orphan Entity (No Public Domain)')
