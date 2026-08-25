@@ -30,7 +30,7 @@ HTML_TEMPLATE = """
             --muted-text: #8E88AB;
             --gain-purple: #632BFC;
             --gain-purple-light: #7873FE;
-            --gain-purple-glow: rgba(99, 43, 252, 0.4);
+            --gain-purple-glow: rgba(99, 43, 252, 0.35);
             --gain-indigo: #2E1BFF;
             --gain-green: #059669;
             --gain-green-bg: #ECFDF5;
@@ -49,28 +49,28 @@ HTML_TEMPLATE = """
             -webkit-font-smoothing: antialiased;
         }
 
+        /* SEAMLESS ULTRA-SMOOTH GRADIENT BLEND (NO HARSH CUTOFFS) */
         body {
             background-color: var(--canvas-bg);
+            background-image: 
+                radial-gradient(ellipse 130% 60% at 50% -12%, rgba(99, 43, 252, 0.32) 0%, rgba(120, 115, 254, 0.2) 35%, rgba(247, 245, 254, 0.7) 65%, var(--canvas-bg) 100%),
+                radial-gradient(circle at 10% 20%, rgba(99, 43, 252, 0.15) 0%, transparent 45%),
+                radial-gradient(circle at 90% 25%, rgba(46, 27, 255, 0.13) 0%, transparent 45%);
+            background-attachment: fixed;
             color: var(--primary-text);
             min-height: 100vh;
             line-height: 1.5;
         }
 
-        /* TOP 30% PURPLE HERO WRAPPER */
-        .top-purple-section {
-            background: linear-gradient(180deg, #0F0726 0%, #1A0D3D 45%, #2E1466 75%, #501ECE 92%, var(--canvas-bg) 100%);
-            background-attachment: scroll;
-            color: #FFFFFF;
-            padding-bottom: 5rem;
-            position: relative;
-        }
-
-        /* NAVIGATION BAR */
+        /* FROSTED GLASS NAVIGATION */
         nav {
-            background: rgba(15, 7, 38, 0.65);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.82);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid var(--gain-border-subtle);
             padding: 1.1rem 2.5rem;
             display: flex;
             align-items: center;
@@ -81,7 +81,7 @@ HTML_TEMPLATE = """
             font-size: 1.35rem;
             font-weight: 800;
             letter-spacing: -0.04em;
-            color: #FFFFFF;
+            color: var(--primary-text);
             text-decoration: none;
             display: flex;
             align-items: center;
@@ -89,25 +89,25 @@ HTML_TEMPLATE = """
         }
 
         .nav-brand span.dot {
-            color: #A6A9FF;
+            color: var(--gain-purple);
         }
 
         .nav-tag {
-            background: rgba(99, 43, 252, 0.25);
-            color: #CED1FF;
-            border: 1px solid rgba(166, 169, 255, 0.3);
+            background: #F3F0FF;
+            color: var(--gain-purple);
+            border: 1px solid rgba(99, 43, 252, 0.2);
             font-size: 0.72rem;
             font-weight: 700;
             padding: 4px 12px;
             border-radius: var(--radius-pill);
             text-transform: uppercase;
-            letter-spacing: 0.08em;
+            letter-spacing: 0.06em;
         }
 
         /* HERO HEADER */
         .hero {
             text-align: center;
-            padding: 3.5rem 1.5rem 1.5rem;
+            padding: 4.5rem 1.5rem 2.5rem;
             max-width: 900px;
             margin: 0 auto;
         }
@@ -116,58 +116,55 @@ HTML_TEMPLATE = """
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: #CED1FF;
+            background: #F3F0FF;
+            border: 1px solid rgba(99, 43, 252, 0.2);
+            color: var(--gain-purple);
             font-size: 0.82rem;
             font-weight: 700;
             padding: 6px 16px;
             border-radius: var(--radius-pill);
-            margin-bottom: 1.2rem;
+            margin-bottom: 1.5rem;
         }
 
         .hero h1 {
-            font-size: 3.2rem;
+            font-size: 3.4rem;
             font-weight: 800;
             letter-spacing: -0.05em;
-            color: #FFFFFF;
-            margin-bottom: 0.8rem;
+            color: var(--primary-text);
+            margin-bottom: 1rem;
             line-height: 1.1;
         }
 
         .hero h1 span.gradient-text {
-            background: linear-gradient(135deg, #FFFFFF 40%, #A6A9FF 80%, #CED1FF 100%);
+            background: linear-gradient(135deg, #0F0726 20%, #632BFC 75%, #2E1BFF 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .hero p {
-            font-size: 1.15rem;
+            font-size: 1.2rem;
             font-weight: 400;
-            color: #CED1FF;
+            color: var(--secondary-text);
             letter-spacing: -0.015em;
             line-height: 1.5;
             max-width: 720px;
             margin: 0 auto;
-            opacity: 0.9;
         }
 
-        /* BOTTOM 70% WHITE MAIN CONTAINER */
+        /* MAIN CONTAINER */
         .container {
             max-width: 1280px;
-            margin: -3.5rem auto 5rem;
+            margin: 0 auto 5rem;
             padding: 0 1.5rem;
-            position: relative;
-            z-index: 10;
         }
 
-        /* CLEAN WHITE GAIN CARD */
+        /* CLEAN WHITE GAIN CARD WITH SOFT PURPLE DIFFUSED GLOW */
         .gain-card {
             background: var(--card-bg);
             border: 1px solid var(--gain-border-subtle);
             border-radius: var(--radius-card);
             padding: 2.8rem;
-            box-shadow: 0 20px 50px rgba(99, 43, 252, 0.08), 0 2px 6px rgba(0, 0, 0, 0.02);
+            box-shadow: 0 20px 60px rgba(99, 43, 252, 0.06), 0 2px 6px rgba(0, 0, 0, 0.02);
             margin-bottom: 2rem;
             transition: all 0.3s ease;
         }
@@ -503,27 +500,24 @@ HTML_TEMPLATE = """
 </head>
 <body>
 
-    <!-- TOP 30% PURPLE SECTION -->
-    <div class="top-purple-section">
-        <!-- NAVIGATION -->
-        <nav>
-            <a href="/" class="nav-brand">
-                FindWeb<span class="dot">.ai</span>
-            </a>
-            <div class="nav-tag">
-                Institutional Portfolio Intelligence
-            </div>
-        </nav>
-
-        <!-- HERO HEADER -->
-        <div class="hero">
-            <div class="hero-badge">⚡ Institutional Credit & Private Equity Intelligence</div>
-            <h1>Develop a view on <span class="gradient-text">portfolio companies in minutes</span></h1>
-            <p>Deep M&A operating brand resolution, U.S. SEC EDGAR filings, and European statutory registry triage.</p>
+    <!-- NAVIGATION -->
+    <nav>
+        <a href="/" class="nav-brand">
+            FindWeb<span class="dot">.ai</span>
+        </a>
+        <div class="nav-tag">
+            Institutional Portfolio Intelligence
         </div>
+    </nav>
+
+    <!-- HERO HEADER -->
+    <div class="hero">
+        <div class="hero-badge">⚡ Institutional Credit & Private Equity Intelligence</div>
+        <h1>Develop a view on <span class="gradient-text">portfolio companies in minutes</span></h1>
+        <p>Deep M&A operating brand resolution, U.S. SEC EDGAR filings, and European statutory registry triage.</p>
     </div>
 
-    <!-- BOTTOM 70% WHITE CONTAINER -->
+    <!-- MAIN CONTAINER -->
     <div class="container">
         <div class="gain-card">
             <div id="errorAlert" class="alert-toast">⚠️ Please select a valid Excel (.xlsx) or CSV (.csv) portfolio dataset.</div>
