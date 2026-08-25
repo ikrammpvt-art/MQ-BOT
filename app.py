@@ -23,10 +23,10 @@ HTML_TEMPLATE = """
     <style>
         :root {
             --canvas-bg: #FAF9FE;
-            --card-bg: rgba(255, 255, 255, 0.92);
-            --card-bg-subtle: #F6F3FF;
+            --card-bg: #FFFFFF;
+            --card-bg-subtle: #F7F5FE;
             --primary-text: #0F0726;
-            --secondary-text: #534D70;
+            --secondary-text: #5E5877;
             --muted-text: #8E88AB;
             --gain-purple: #632BFC;
             --gain-purple-light: #7873FE;
@@ -35,8 +35,8 @@ HTML_TEMPLATE = """
             --gain-green: #059669;
             --gain-green-bg: #ECFDF5;
             --gain-green-border: #A7F3D0;
-            --gain-border: rgba(99, 43, 252, 0.16);
-            --gain-border-subtle: #E8E3FD;
+            --gain-border: rgba(99, 43, 252, 0.12);
+            --gain-border-subtle: #ECEAFE;
             --radius-card: 20px;
             --radius-pill: 980px;
         }
@@ -50,28 +50,27 @@ HTML_TEMPLATE = """
         }
 
         body {
-            background-color: #FAF9FE;
-            background-image: 
-                radial-gradient(at 10% 10%, rgba(99, 43, 252, 0.18) 0px, transparent 48%),
-                radial-gradient(at 90% 15%, rgba(120, 115, 254, 0.22) 0px, transparent 52%),
-                radial-gradient(at 50% 45%, rgba(243, 240, 255, 0.85) 0px, transparent 65%),
-                radial-gradient(at 15% 85%, rgba(99, 43, 252, 0.15) 0px, transparent 50%),
-                radial-gradient(at 85% 90%, rgba(46, 27, 255, 0.13) 0px, transparent 50%);
-            background-attachment: fixed;
+            background-color: var(--canvas-bg);
             color: var(--primary-text);
             min-height: 100vh;
             line-height: 1.5;
         }
 
-        /* FROSTED WHITE & PURPLE NAVIGATION */
+        /* TOP 30% PURPLE HERO WRAPPER */
+        .top-purple-section {
+            background: linear-gradient(180deg, #0F0726 0%, #1A0D3D 45%, #2E1466 75%, #501ECE 92%, var(--canvas-bg) 100%);
+            background-attachment: scroll;
+            color: #FFFFFF;
+            padding-bottom: 5rem;
+            position: relative;
+        }
+
+        /* NAVIGATION BAR */
         nav {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: rgba(255, 255, 255, 0.88);
+            background: rgba(15, 7, 38, 0.65);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--gain-border-subtle);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             padding: 1.1rem 2.5rem;
             display: flex;
             align-items: center;
@@ -82,7 +81,7 @@ HTML_TEMPLATE = """
             font-size: 1.35rem;
             font-weight: 800;
             letter-spacing: -0.04em;
-            color: var(--primary-text);
+            color: #FFFFFF;
             text-decoration: none;
             display: flex;
             align-items: center;
@@ -90,25 +89,25 @@ HTML_TEMPLATE = """
         }
 
         .nav-brand span.dot {
-            color: var(--gain-purple);
+            color: #A6A9FF;
         }
 
         .nav-tag {
-            background: #F3F0FF;
-            color: var(--gain-purple);
-            border: 1px solid rgba(99, 43, 252, 0.2);
+            background: rgba(99, 43, 252, 0.25);
+            color: #CED1FF;
+            border: 1px solid rgba(166, 169, 255, 0.3);
             font-size: 0.72rem;
             font-weight: 700;
             padding: 4px 12px;
             border-radius: var(--radius-pill);
             text-transform: uppercase;
-            letter-spacing: 0.06em;
+            letter-spacing: 0.08em;
         }
 
-        /* HERO SECTION */
+        /* HERO HEADER */
         .hero {
             text-align: center;
-            padding: 4.5rem 1.5rem 2.5rem;
+            padding: 3.5rem 1.5rem 1.5rem;
             max-width: 900px;
             margin: 0 auto;
         }
@@ -117,56 +116,58 @@ HTML_TEMPLATE = """
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            background: #F3F0FF;
-            border: 1px solid rgba(99, 43, 252, 0.2);
-            color: var(--gain-purple);
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #CED1FF;
             font-size: 0.82rem;
             font-weight: 700;
             padding: 6px 16px;
             border-radius: var(--radius-pill);
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.2rem;
         }
 
         .hero h1 {
-            font-size: 3.4rem;
+            font-size: 3.2rem;
             font-weight: 800;
             letter-spacing: -0.05em;
-            color: var(--primary-text);
-            margin-bottom: 1rem;
+            color: #FFFFFF;
+            margin-bottom: 0.8rem;
             line-height: 1.1;
         }
 
         .hero h1 span.gradient-text {
-            background: linear-gradient(135deg, #0F0726 20%, #632BFC 75%, #2E1BFF 100%);
+            background: linear-gradient(135deg, #FFFFFF 40%, #A6A9FF 80%, #CED1FF 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .hero p {
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             font-weight: 400;
-            color: var(--secondary-text);
+            color: #CED1FF;
             letter-spacing: -0.015em;
             line-height: 1.5;
             max-width: 720px;
             margin: 0 auto;
+            opacity: 0.9;
         }
 
+        /* BOTTOM 70% WHITE MAIN CONTAINER */
         .container {
             max-width: 1280px;
-            margin: 0 auto 5rem;
+            margin: -3.5rem auto 5rem;
             padding: 0 1.5rem;
+            position: relative;
+            z-index: 10;
         }
 
-        /* FROSTED PURPLE & WHITE GAIN CARD */
+        /* CLEAN WHITE GAIN CARD */
         .gain-card {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(99, 43, 252, 0.16);
+            background: var(--card-bg);
+            border: 1px solid var(--gain-border-subtle);
             border-radius: var(--radius-card);
             padding: 2.8rem;
-            box-shadow: 0 16px 45px rgba(99, 43, 252, 0.08), 0 2px 6px rgba(0, 0, 0, 0.02);
+            box-shadow: 0 20px 50px rgba(99, 43, 252, 0.08), 0 2px 6px rgba(0, 0, 0, 0.02);
             margin-bottom: 2rem;
             transition: all 0.3s ease;
         }
@@ -502,23 +503,27 @@ HTML_TEMPLATE = """
 </head>
 <body>
 
-    <!-- FINDWEB TOP NAVIGATION -->
-    <nav>
-        <a href="/" class="nav-brand">
-            FindWeb<span class="dot">.ai</span>
-        </a>
-        <div class="nav-tag">
-            Institutional Portfolio Intelligence
-        </div>
-    </nav>
+    <!-- TOP 30% PURPLE SECTION -->
+    <div class="top-purple-section">
+        <!-- NAVIGATION -->
+        <nav>
+            <a href="/" class="nav-brand">
+                FindWeb<span class="dot">.ai</span>
+            </a>
+            <div class="nav-tag">
+                Institutional Portfolio Intelligence
+            </div>
+        </nav>
 
-    <!-- HERO HEADER -->
-    <div class="hero">
-        <div class="hero-badge">⚡ Institutional Credit & Private Equity Intelligence</div>
-        <h1>Develop a view on <span class="gradient-text">portfolio companies in minutes</span></h1>
-        <p>Deep M&A operating brand resolution, U.S. SEC EDGAR filings, and European statutory registry triage.</p>
+        <!-- HERO HEADER -->
+        <div class="hero">
+            <div class="hero-badge">⚡ Institutional Credit & Private Equity Intelligence</div>
+            <h1>Develop a view on <span class="gradient-text">portfolio companies in minutes</span></h1>
+            <p>Deep M&A operating brand resolution, U.S. SEC EDGAR filings, and European statutory registry triage.</p>
+        </div>
     </div>
 
+    <!-- BOTTOM 70% WHITE CONTAINER -->
     <div class="container">
         <div class="gain-card">
             <div id="errorAlert" class="alert-toast">⚠️ Please select a valid Excel (.xlsx) or CSV (.csv) portfolio dataset.</div>
