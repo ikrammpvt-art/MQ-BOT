@@ -22,21 +22,21 @@ HTML_TEMPLATE = """
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500&family=Mulish:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --canvas-bg: #FFFFFF;
-            --card-bg: #FFFFFF;
-            --card-bg-subtle: #FAFAFE;
+            --canvas-bg: #FAF9FE;
+            --card-bg: rgba(255, 255, 255, 0.92);
+            --card-bg-subtle: #F6F3FF;
             --primary-text: #0F0726;
-            --secondary-text: #616786;
-            --muted-text: #8E93AB;
+            --secondary-text: #534D70;
+            --muted-text: #8E88AB;
             --gain-purple: #632BFC;
             --gain-purple-light: #7873FE;
-            --gain-purple-glow: rgba(99, 43, 252, 0.35);
+            --gain-purple-glow: rgba(99, 43, 252, 0.4);
             --gain-indigo: #2E1BFF;
             --gain-green: #059669;
             --gain-green-bg: #ECFDF5;
             --gain-green-border: #A7F3D0;
-            --gain-border: rgba(99, 43, 252, 0.12);
-            --gain-border-subtle: #ECEAFE;
+            --gain-border: rgba(99, 43, 252, 0.16);
+            --gain-border-subtle: #E8E3FD;
             --radius-card: 20px;
             --radius-pill: 980px;
         }
@@ -50,16 +50,20 @@ HTML_TEMPLATE = """
         }
 
         body {
-            background-color: var(--canvas-bg);
+            background-color: #FAF9FE;
             background-image: 
-                radial-gradient(circle at 50% -10%, rgba(99, 43, 252, 0.07) 0%, rgba(46, 27, 255, 0.03) 40%, #FFFFFF 70%);
+                radial-gradient(at 10% 10%, rgba(99, 43, 252, 0.18) 0px, transparent 48%),
+                radial-gradient(at 90% 15%, rgba(120, 115, 254, 0.22) 0px, transparent 52%),
+                radial-gradient(at 50% 45%, rgba(243, 240, 255, 0.85) 0px, transparent 65%),
+                radial-gradient(at 15% 85%, rgba(99, 43, 252, 0.15) 0px, transparent 50%),
+                radial-gradient(at 85% 90%, rgba(46, 27, 255, 0.13) 0px, transparent 50%);
             background-attachment: fixed;
             color: var(--primary-text);
             min-height: 100vh;
             line-height: 1.5;
         }
 
-        /* FROSTED WHITE NAVIGATION */
+        /* FROSTED WHITE & PURPLE NAVIGATION */
         nav {
             position: sticky;
             top: 0;
@@ -154,13 +158,15 @@ HTML_TEMPLATE = """
             padding: 0 1.5rem;
         }
 
-        /* CLEAN WHITE GAIN CARD */
+        /* FROSTED PURPLE & WHITE GAIN CARD */
         .gain-card {
-            background: var(--card-bg);
-            border: 1px solid var(--gain-border-subtle);
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(99, 43, 252, 0.16);
             border-radius: var(--radius-card);
             padding: 2.8rem;
-            box-shadow: 0 12px 40px rgba(99, 43, 252, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02);
+            box-shadow: 0 16px 45px rgba(99, 43, 252, 0.08), 0 2px 6px rgba(0, 0, 0, 0.02);
             margin-bottom: 2rem;
             transition: all 0.3s ease;
         }
