@@ -18,7 +18,7 @@ HTML_TEMPLATE = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FindWeb - Institutional Portfolio Intelligence & Verification Portal</title>
+    <title>FindWeb - Institutional Portfolio Intelligence & Extraction</title>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -48,7 +48,7 @@ HTML_TEMPLATE = """
             box-shadow: 0 4px 20px rgba(0,0,0,0.15);
         }
 
-        header h1 { font-size: 2.3rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+        header h1 { font-size: 2.4rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
         header p { font-size: 1.05rem; color: #94A3B8; max-width: 800px; margin: 0 auto; font-weight: 400; }
 
         .container { max-width: 1350px; margin: -2rem auto 4rem; padding: 0 1.5rem; }
@@ -65,27 +65,25 @@ HTML_TEMPLATE = """
         .upload-area {
             border: 2px dashed #93C5FD;
             border-radius: 12px;
-            padding: 3rem 2rem;
+            padding: 3.5rem 2rem;
             text-align: center;
             cursor: pointer;
             background-color: #F8FAFC;
             transition: all 0.25s ease;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.8rem;
         }
 
         .upload-area:hover { background-color: #EFF6FF; border-color: var(--accent); }
-        .upload-icon { font-size: 3.5rem; color: var(--accent); margin-bottom: 0.8rem; }
-        .upload-title { font-size: 1.35rem; font-weight: 700; color: var(--primary); margin-bottom: 0.4rem; }
-        .upload-sub { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 1.2rem; }
+        .upload-icon { font-size: 4rem; color: var(--accent); margin-bottom: 0.8rem; }
+        .upload-title { font-size: 1.45rem; font-weight: 800; color: var(--primary); margin-bottom: 0.4rem; }
+        .upload-sub { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 1.5rem; }
 
         input[type="file"] { display: none; }
 
-        .btn-group {
+        .btn-center-container {
             display: flex;
-            gap: 1rem;
             justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 1rem;
+            margin-top: 1.5rem;
         }
 
         .btn {
@@ -94,17 +92,18 @@ HTML_TEMPLATE = """
             justify-content: center;
             background: var(--primary);
             color: white;
-            padding: 0.85rem 1.8rem;
+            padding: 0.95rem 2.2rem;
             border-radius: 10px;
-            font-weight: 600;
-            font-size: 0.95rem;
+            font-weight: 700;
+            font-size: 1rem;
             border: none;
             cursor: pointer;
             transition: all 0.2s ease;
             text-decoration: none;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
         }
-        .btn:hover { background: var(--primary-light); transform: translateY(-1px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        .btn:disabled { background: #94A3B8; cursor: not-allowed; transform: none; box-shadow: none; }
         .btn-browse { background: var(--accent); }
         .btn-browse:hover { background: var(--accent-hover); }
         .btn-success { background: var(--emerald); }
@@ -120,7 +119,7 @@ HTML_TEMPLATE = """
             border-radius: 14px;
             padding: 1.5rem;
             margin-top: 2rem;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
 
         .terminal-header {
@@ -163,9 +162,9 @@ HTML_TEMPLATE = """
 
         .progress-bar-container {
             width: 100%;
-            height: 8px;
+            height: 10px;
             background: #1E293B;
-            border-radius: 4px;
+            border-radius: 6px;
             overflow: hidden;
             margin-top: 1rem;
         }
@@ -202,7 +201,7 @@ HTML_TEMPLATE = """
             background: linear-gradient(135deg, #ECFDF5 0%, #F0FDF4 100%);
             border: 1px solid var(--success-border);
             border-radius: 12px;
-            padding: 1.8rem;
+            padding: 2rem;
             text-align: center;
             margin: 2rem 0;
         }
@@ -245,17 +244,6 @@ HTML_TEMPLATE = """
         .url-link { color: var(--accent); font-weight: 600; text-decoration: none; word-break: break-all; }
         .url-link:hover { text-decoration: underline; }
 
-        .pagination-container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-top: 2rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid var(--border);
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
         .alert-error {
             background-color: #FEF2F2;
             color: #991B1B;
@@ -278,22 +266,23 @@ HTML_TEMPLATE = """
 
     <div class="container">
         <div class="card">
-            <div id="errorAlert" class="alert-error">⚠️ Please select an Excel (.xlsx) or CSV (.csv) file to begin!</div>
+            <div id="errorAlert" class="alert-error">⚠️ Please select an Excel (.xlsx) or CSV (.csv) file first!</div>
 
-            <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data" onsubmit="return handleFormSubmit(event)">
-                <div class="upload-area" onclick="document.getElementById('fileInput').click()">
-                    <div class="upload-icon">📁</div>
-                    <div class="upload-title" id="uploadLabel">Drag & Drop Portfolio Dataset Here</div>
-                    <div class="upload-sub">Supports Excel (.xlsx, .xls) and CSV (.csv) datasets</div>
-                    <button type="button" class="btn btn-browse" onclick="event.stopPropagation(); document.getElementById('fileInput').click();">🔍 Choose File From Computer</button>
-                    <input type="file" id="fileInput" name="file" accept=".xlsx, .xls, .csv" onchange="updateFileName()">
-                </div>
+            <!-- FILE UPLOAD DROPZONE -->
+            <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                <div class="upload-icon">📁</div>
+                <div class="upload-title" id="uploadLabel">Drag & Drop Portfolio Dataset Here</div>
+                <div class="upload-sub">Supports Excel (.xlsx, .xls) and CSV (.csv) datasets</div>
+                <button type="button" class="btn btn-browse" onclick="event.stopPropagation(); document.getElementById('fileInput').click();">🔍 Choose File From Computer</button>
+                <input type="file" id="fileInput" name="file" accept=".xlsx, .xls, .csv" onchange="updateFileName()">
+            </div>
 
-                <div class="btn-group">
-                    <button type="submit" id="submitBtn" class="btn btn-success">🚀 Upload & Run Hermes AI Enrichment</button>
-                    <a href="/run-default" onclick="showLiveTerminalForDemo()" class="btn btn-secondary">⚡ Load Demo Institutional Portfolio</a>
-                </div>
-            </form>
+            <!-- SINGLE MASTER ACTION BUTTON -->
+            <div class="btn-center-container">
+                <button type="button" id="startExtractionBtn" class="btn btn-success" style="font-size: 1.15rem; padding: 1.1rem 3rem; width: 100%; max-width: 500px;" onclick="startAsyncEnrichment()">
+                    🚀 Scrape & Enrich Portfolio Dataset
+                </button>
+            </div>
 
             <!-- LIVE REAL-TIME TERMINAL CONSOLE -->
             <div id="terminalContainer" class="terminal-container">
@@ -304,7 +293,7 @@ HTML_TEMPLATE = """
                         <div class="dot dot-green"></div>
                     </div>
                     <div class="terminal-title">🟢 HERMES AI ENGINE — REAL-TIME EXECUTION FEED</div>
-                    <div id="terminalPct" style="color: #10B981; font-family: 'Fira Code', monospace; font-size: 0.85rem; font-weight: 600;">0%</div>
+                    <div id="terminalPct" style="color: #10B981; font-family: 'Fira Code', monospace; font-size: 0.95rem; font-weight: 700;">0%</div>
                 </div>
                 <div id="terminalLogs" class="terminal-body">
                     <div class="log-line"><span class="log-time">[SYSTEM]</span> <span class="log-tag-ai">[INIT]</span> Initializing Hermes Intelligence Subsystems...</div>
@@ -315,114 +304,18 @@ HTML_TEMPLATE = """
             </div>
         </div>
 
-        {% if summary %}
-        <div class="card" id="resultsSection">
-            <h2 style="color: var(--primary); font-size: 1.6rem; font-weight: 800; margin-bottom: 0.5rem;">Processing Report & Data Summary</h2>
-            <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem;">Audited & Verified by <strong>Hermes AI Agent + Watchdog Supervisor</strong>.</p>
-            
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-number">{{ summary.total_rows }}</div>
-                    <div class="stat-label">Total Debt Tranches</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">{{ summary.unique_companies }}</div>
-                    <div class="stat-label">Unique Operating Entities</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">{{ summary.verified_pct }}%</div>
-                    <div class="stat-label">Verified Hit Rate</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">16</div>
-                    <div class="stat-label">Enriched Fields</div>
-                </div>
-            </div>
-
-            <!-- ONE-CLICK DOWNLOAD BANNER -->
-            <div class="download-banner">
-                <h3 style="color: #065F46; font-size: 1.3rem; font-weight: 700; margin-bottom: 0.4rem;">📥 Download Verified Portfolio Files</h3>
-                <p style="color: #047857; font-size: 0.95rem; margin-bottom: 1.2rem;">Native formatting verified for Apple Numbers, Microsoft Excel, Google Sheets & Pandas.</p>
-                <div class="btn-group">
-                    <a href="/download/csv" class="btn btn-success" style="font-size: 1rem; padding: 0.9rem 2.2rem;">🍏 Download Apple Numbers CSV</a>
-                    <a href="/download/xlsx" class="btn btn-browse" style="font-size: 1rem; padding: 0.9rem 2.2rem;">📊 Download Excel Workbook (.xlsx)</a>
-                </div>
-            </div>
-
-            <!-- SEARCH & FILTER BAR -->
-            <div class="search-bar-container">
-                <input type="text" id="tableSearch" class="search-input" placeholder="🔍 Search company name, CEO, PE sponsor, or city in table..." onkeyup="filterTable()">
-                <div class="btn-group" style="margin-top: 0;">
-                    <a href="/page?p=all" class="btn btn-secondary">👁️ View All {{ pagination.total_records }} Entities</a>
-                    <a href="/page?p=1" class="btn btn-secondary">📄 Paginate (15 per page)</a>
-                </div>
-            </div>
-
-            <!-- DATA TABLE PREVIEW -->
-            <div style="overflow-x: auto;">
-                <table id="dataTable">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Portfolio Entity</th>
-                            <th>Verified Website</th>
-                            <th>Key Executive (CEO)</th>
-                            <th>PE Sponsor / Owner</th>
-                            <th>HQ City, Country</th>
-                            <th>Audit Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for row in preview %}
-                        <tr>
-                            <td>{{ row['row_num'] }}</td>
-                            <td><strong style="color: var(--primary);">{{ row['company_name'] }}</strong></td>
-                            <td>
-                                {% if row['find web'] and row['find web'].startswith('http') %}
-                                    <a href="{{ row['find web'] }}" target="_blank" class="url-link">{{ row['find web'] }}</a>
-                                {% else %}
-                                    <span style="color: var(--text-muted); font-size: 0.85rem;">{{ row['find web'] }}</span>
-                                {% endif %}
-                            </td>
-                            <td>{{ row['Key_Executive'] }}</td>
-                            <td>{{ row['PE_Sponsor_Firm'] }}</td>
-                            <td>{{ row['City'] }}{% if row['Country_ISO'] %}, {{ row['Country_ISO'] }}{% endif %}</td>
-                            <td>
-                                {% if row['find web'] and row['find web'].startswith('http') %}
-                                    <span class="status-badge badge-verified">✅ Verified 200 OK</span>
-                                {% else %}
-                                    <span class="status-badge badge-spv">⚠️ Shell / SPV</span>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- PAGINATION NAVIGATION BAR -->
-            <div class="pagination-container">
-                <div style="font-size: 0.95rem; color: var(--text-muted); font-weight: 600;">
-                    Page <strong>{{ pagination.current_page }}</strong> of <strong>{{ pagination.total_pages }}</strong> (Showing {{ pagination.start_idx }}–{{ pagination.end_idx }} of {{ pagination.total_records }} records)
-                </div>
-                <div class="btn-group" style="margin-top: 0;">
-                    {% if pagination.has_prev %}
-                        <a href="/page?p={{ pagination.prev_page }}" class="btn btn-secondary">◀ Prev Page</a>
-                    {% endif %}
-                    {% if pagination.has_next %}
-                        <a href="/page?p={{ pagination.next_page }}" class="btn btn-browse">Next Page ▶</a>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-        {% endif %}
+        <!-- DYNAMIC RESULTS CONTAINER -->
+        <div id="resultsContainer" style="display: none;"></div>
     </div>
 
     <script>
+        let selectedFile = null;
+
         function updateFileName() {
             const input = document.getElementById('fileInput');
             if (input.files.length > 0) {
-                document.getElementById('uploadLabel').innerHTML = "Selected File: <strong>" + input.files[0].name + "</strong>";
+                selectedFile = input.files[0];
+                document.getElementById('uploadLabel').innerHTML = "Selected File: <strong>" + selectedFile.name + "</strong>";
                 document.getElementById('errorAlert').style.display = 'none';
             }
         }
@@ -446,51 +339,145 @@ HTML_TEMPLATE = """
             document.getElementById('terminalPct').innerText = pct + '%';
         }
 
-        function handleFormSubmit(e) {
+        async function startAsyncEnrichment() {
             const input = document.getElementById('fileInput');
-            if (input.files.length === 0) {
-                e.preventDefault();
+            if (!input.files || input.files.length === 0) {
                 document.getElementById('errorAlert').style.display = 'block';
-                return false;
+                return;
             }
 
-            // Reveal live terminal feed
-            document.getElementById('terminalContainer').style.display = 'block';
-            document.getElementById('submitBtn').disabled = true;
-            document.getElementById('submitBtn').innerText = '⏳ Processing in Background...';
+            const file = input.files[0];
+            const btn = document.getElementById('startExtractionBtn');
+            const term = document.getElementById('terminalContainer');
+            
+            term.style.display = 'block';
+            btn.disabled = true;
+            btn.innerText = '⏳ Scraping & Enriching (Please Wait)...';
 
-            addLog('SCHEMA', 'log-tag-ai', 'File parsed: <strong>' + input.files[0].name + '</strong>');
+            addLog('UPLOAD', 'log-tag-ai', 'Received <strong>' + file.name + '</strong> (' + Math.round(file.size/1024) + ' KB)');
             setProgress(15);
 
-            setTimeout(() => {
-                addLog('CACHE', 'log-tag-db', 'Querying 2,598 Master Entity Database...');
-                setProgress(35);
-            }, 800);
+            const formData = new FormData();
+            formData.append('file', file);
 
-            setTimeout(() => {
-                addLog('GEMINI', 'log-tag-ai', 'Dispatching parallel batch reasoning across Gemini 3.5 Flash...');
-                setProgress(60);
-            }, 1800);
+            // Step progress animations
+            const t1 = setTimeout(() => { addLog('CACHE', 'log-tag-db', 'Querying 2,598 Master Entity Database...'); setProgress(35); }, 1200);
+            const t2 = setTimeout(() => { addLog('GEMINI', 'log-tag-ai', 'Dispatching parallel batch reasoning across Gemini 3.5 Flash...'); setProgress(60); }, 3500);
+            const t3 = setTimeout(() => { addLog('SEARCH', 'log-tag-search', 'Google Custom Search Engine resolving live parent brands...'); setProgress(80); }, 6500);
+            const t4 = setTimeout(() => { addLog('WATCHDOG', 'log-tag-watchdog', 'Hermes Watchdog inspecting rows & auto-healing SPV debt tranches...'); setProgress(90); }, 9000);
 
-            setTimeout(() => {
-                addLog('SEARCH', 'log-tag-search', 'Google Custom Search Engine resolving live parent brands...');
-                setProgress(80);
-            }, 3000);
+            try {
+                const response = await fetch('/api/process', {
+                    method: 'POST',
+                    body: formData
+                });
 
-            setTimeout(() => {
-                addLog('WATCHDOG', 'log-tag-watchdog', 'Hermes Watchdog inspecting rows & auto-healing SPV debt tranches...');
-                setProgress(95);
-            }, 4500);
+                clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4);
 
-            return true;
+                const data = await response.json();
+                if (data.status === 'success') {
+                    addLog('SUCCESS', 'log-tag-search', 'Enrichment complete! Rendered ' + data.summary.unique_companies + ' unique entities.');
+                    setProgress(100);
+                    btn.innerText = '✅ Extraction Complete!';
+                    renderResults(data);
+                } else {
+                    addLog('ERROR', 'log-tag-ai', 'Server notice: ' + (data.error || 'Failed to process file.'));
+                    btn.disabled = false;
+                    btn.innerText = '🚀 Scrape & Enrich Portfolio Dataset';
+                }
+            } catch (err) {
+                clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4);
+                addLog('ERROR', 'log-tag-ai', 'Network exception: ' + err.message);
+                btn.disabled = false;
+                btn.innerText = '🚀 Scrape & Enrich Portfolio Dataset';
+            }
         }
 
-        function showLiveTerminalForDemo() {
-            document.getElementById('terminalContainer').style.display = 'block';
-            addLog('DEMO', 'log-tag-ai', 'Loading Demo Institutional Loan Tranches...');
-            setProgress(25);
-            setTimeout(() => { addLog('CACHE', 'log-tag-db', '2,598 Database index lookup complete.'); setProgress(70); }, 600);
-            setTimeout(() => { addLog('EXPORT', 'log-tag-search', 'Generating Numbers CSV and Excel files...'); setProgress(100); }, 1200);
+        function renderResults(data) {
+            const container = document.getElementById('resultsContainer');
+            
+            let tableRows = '';
+            data.preview.forEach(row => {
+                const isHttp = row['find web'] && row['find web'].startsWith('http');
+                const webHtml = isHttp ? `<a href="${row['find web']}" target="_blank" class="url-link">${row['find web']}</a>` : `<span style="color: var(--text-muted); font-size: 0.85rem;">${row['find web']}</span>`;
+                const badgeHtml = isHttp ? `<span class="status-badge badge-verified">✅ Verified 200 OK</span>` : `<span class="status-badge badge-spv">⚠️ Shell / SPV</span>`;
+                
+                tableRows += `
+                    <tr>
+                        <td>${row.row_num}</td>
+                        <td><strong style="color: var(--primary);">${row.company_name}</strong></td>
+                        <td>${webHtml}</td>
+                        <td>${row.Key_Executive}</td>
+                        <td>${row.PE_Sponsor_Firm}</td>
+                        <td>${row.City}${row.Country_ISO ? ', ' + row.Country_ISO : ''}</td>
+                        <td>${badgeHtml}</td>
+                    </tr>
+                `;
+            });
+
+            container.innerHTML = `
+                <div class="card">
+                    <h2 style="color: var(--primary); font-size: 1.6rem; font-weight: 800; margin-bottom: 0.5rem;">Processing Report & Data Summary</h2>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem;">Audited & Verified by <strong>Hermes AI Agent + Watchdog Supervisor</strong>.</p>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number">${data.summary.total_rows}</div>
+                            <div class="stat-label">Total Debt Tranches</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">${data.summary.unique_companies}</div>
+                            <div class="stat-label">Unique Operating Entities</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">${data.summary.verified_pct}%</div>
+                            <div class="stat-label">Verified Hit Rate</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">16</div>
+                            <div class="stat-label">Enriched Fields</div>
+                        </div>
+                    </div>
+
+                    <!-- ONE-CLICK DOWNLOAD BANNER -->
+                    <div class="download-banner">
+                        <h3 style="color: #065F46; font-size: 1.3rem; font-weight: 700; margin-bottom: 0.4rem;">📥 Download Verified Portfolio Files</h3>
+                        <p style="color: #047857; font-size: 0.95rem; margin-bottom: 1.2rem;">Native formatting verified for Apple Numbers, Microsoft Excel, Google Sheets & Pandas.</p>
+                        <div class="btn-center-container" style="gap: 1rem; flex-wrap: wrap;">
+                            <a href="/download/csv" class="btn btn-success" style="font-size: 1rem; padding: 0.9rem 2.2rem;">🍏 Download Apple Numbers CSV</a>
+                            <a href="/download/xlsx" class="btn btn-browse" style="font-size: 1rem; padding: 0.9rem 2.2rem;">📊 Download Excel Workbook (.xlsx)</a>
+                        </div>
+                    </div>
+
+                    <!-- SEARCH & FILTER BAR -->
+                    <div class="search-bar-container">
+                        <input type="text" id="tableSearch" class="search-input" placeholder="🔍 Search company name, CEO, PE sponsor, or city in table..." onkeyup="filterTable()">
+                    </div>
+
+                    <!-- DATA TABLE PREVIEW -->
+                    <div style="overflow-x: auto;">
+                        <table id="dataTable">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Portfolio Entity</th>
+                                    <th>Verified Website</th>
+                                    <th>Key Executive (CEO)</th>
+                                    <th>PE Sponsor / Owner</th>
+                                    <th>HQ City, Country</th>
+                                    <th>Audit Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${tableRows}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+
+            container.style.display = 'block';
+            container.scrollIntoView({ behavior: 'smooth' });
         }
 
         function filterTable() {
@@ -517,98 +504,18 @@ HTML_TEMPLATE = """
 latest_df = None
 latest_unique_df = None
 
-def get_summary_and_pagination(page=1, page_size=15):
-    global latest_df, latest_unique_df
-    if latest_df is None or latest_df.empty:
-        return [], {}, {}
-
-    comp_col = 'porfolio_company' if 'porfolio_company' in latest_df.columns else ('issuer_name' if 'issuer_name' in latest_df.columns else latest_df.columns[0])
-    
-    if latest_unique_df is None:
-        latest_unique_df = latest_df.drop_duplicates(subset=[comp_col]).reset_index(drop=True)
-
-    total_records = len(latest_unique_df)
-    total_rows = len(latest_df)
-    
-    verified_cnt = latest_unique_df['find web'].apply(lambda x: str(x).startswith('http')).sum()
-    verified_pct = round((verified_cnt / total_records * 100), 1) if total_records > 0 else 0
-
-    if str(page).lower() == 'all':
-        records = latest_unique_df.copy()
-        current_page = 1
-        total_pages = 1
-        has_prev = False
-        has_next = False
-        start_idx = 1
-        end_idx = total_records
-    else:
-        try:
-            current_page = int(page)
-        except Exception:
-            current_page = 1
-            
-        total_pages = max(1, math.ceil(total_records / page_size))
-        current_page = max(1, min(current_page, total_pages))
-        
-        start = (current_page - 1) * page_size
-        end = min(start + page_size, total_records)
-        records = latest_unique_df.iloc[start:end].copy()
-        
-        has_prev = current_page > 1
-        has_next = current_page < total_pages
-        start_idx = start + 1
-        end_idx = end
-
-    table_data = []
-    for idx, row in records.iterrows():
-        table_data.append({
-            'row_num': idx + 1,
-            'company_name': str(row.get(comp_col, '')),
-            'find web': str(row.get('find web', 'Not Found (Shell / Orphan SPV)')),
-            'Key_Executive': str(row.get('Key_Executive', 'Not Found')),
-            'PE_Sponsor_Firm': str(row.get('PE_Sponsor_Firm', 'Not Found')),
-            'City': str(row.get('City', 'Not Found')),
-            'Country_ISO': str(row.get('Country_ISO', '')),
-            'Original_Link_Status': str(row.get('Original_Link_Status', 'Verified'))
-        })
-
-    summary = {
-        'total_rows': f"{total_rows:,}",
-        'unique_companies': f"{total_records:,}",
-        'verified_pct': verified_pct
-    }
-
-    pagination = {
-        'current_page': current_page,
-        'total_pages': total_pages,
-        'total_records': total_records,
-        'start_idx': start_idx,
-        'end_idx': end_idx,
-        'has_prev': has_prev,
-        'has_next': has_next,
-        'prev_page': current_page - 1,
-        'next_page': current_page + 1,
-        'page_size': page_size
-    }
-
-    return table_data, pagination, summary
-
 @app.route('/')
 def index():
-    global latest_df
-    if latest_df is not None and not latest_df.empty:
-        records, pagination, summary = get_summary_and_pagination(page=1)
-        return render_template_string(HTML_TEMPLATE, summary=summary, preview=records, pagination=pagination)
     return render_template_string(HTML_TEMPLATE)
 
-@app.route('/upload', methods=['POST'])
-def upload_file():
+@app.route('/api/process', methods=['POST'])
+def api_process():
     global latest_df, latest_unique_df
     if 'file' not in request.files:
-        return redirect('/')
+        return jsonify({'status': 'error', 'error': 'No file uploaded'}), 400
     file = request.files['file']
     if file.filename == '':
-        return redirect('/')
+        return jsonify({'status': 'error', 'error': 'Empty filename'}), 400
 
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
     file.save(filepath)
@@ -620,50 +527,42 @@ def upload_file():
         fw.process_and_enrich()
         
         latest_df = fw.processed_df
-        latest_unique_df = None
+        comp_col = fw.comp_col
+        latest_unique_df = latest_df.drop_duplicates(subset=[comp_col]).reset_index(drop=True)
         fw.export(os.path.join(BASE_DIR, 'uploads', 'milund_processed'))
         
-        records, pagination, summary = get_summary_and_pagination(page=1)
-        return render_template_string(HTML_TEMPLATE, summary=summary, preview=records, pagination=pagination)
+        total_records = len(latest_unique_df)
+        total_rows = len(latest_df)
+        verified_cnt = latest_unique_df['find web'].apply(lambda x: str(x).startswith('http')).sum()
+        verified_pct = round((verified_cnt / total_records * 100), 1) if total_records > 0 else 0
+
+        preview_rows = []
+        for idx, row in latest_unique_df.iterrows():
+            preview_rows.append({
+                'row_num': idx + 1,
+                'company_name': str(row.get(comp_col, '')),
+                'find web': str(row.get('find web', 'Not Found (Shell / Orphan SPV)')),
+                'Key_Executive': str(row.get('Key_Executive', 'Not Found')),
+                'PE_Sponsor_Firm': str(row.get('PE_Sponsor_Firm', 'Not Found')),
+                'City': str(row.get('City', 'Not Found')),
+                'Country_ISO': str(row.get('Country_ISO', '')),
+                'Original_Link_Status': str(row.get('Original_Link_Status', 'Verified'))
+            })
+
+        summary = {
+            'total_rows': f"{total_rows:,}",
+            'unique_companies': f"{total_records:,}",
+            'verified_pct': verified_pct
+        }
+
+        return jsonify({
+            'status': 'success',
+            'summary': summary,
+            'preview': preview_rows
+        })
     except Exception as e:
-        print(f"Error processing upload: {e}", flush=True)
-        return redirect('/')
-
-@app.route('/run-default')
-def run_default():
-    global latest_df, latest_unique_df
-    demo_companies = [
-        {"issuer_name": "United Airlines Hldgs Inc.", "sic": "4512", "SIC Result": "Airlines"},
-        {"issuer_name": "Biffa Group", "sic": "4953", "SIC Result": "Refuse Systems"},
-        {"issuer_name": "Roblox Corp.", "sic": "7372", "SIC Result": "Prepackaged Software"},
-        {"issuer_name": "Indofood Intl Finance LTD", "sic": "2098", "SIC Result": "Food & Beverages"},
-        {"issuer_name": "Bach Bidco S.P.A.", "sic": "2621", "SIC Result": "Paper & Packaging"},
-        {"issuer_name": "BCP V Modular Services Finance PLC", "sic": "7359", "SIC Result": "Modular Buildings"},
-        {"issuer_name": "Wanda Group", "sic": "6798", "SIC Result": "Real Estate"},
-        {"issuer_name": "Vossloh AG", "sic": "3312", "SIC Result": "Rail Infrastructure"},
-        {"issuer_name": "Raiffeisen Bank", "sic": "6021", "SIC Result": "Commercial Banking"}
-    ]
-    demo_df = pd.DataFrame(demo_companies)
-    filepath = os.path.join(app.config['UPLOAD_FOLDER'], 'demo_portfolio.xlsx')
-    demo_df.to_excel(filepath, index=False)
-
-    fw = CompanyFramework(filepath)
-    fw.load_data()
-    fw.detect_anomalies()
-    fw.process_and_enrich()
-    
-    latest_df = fw.processed_df
-    latest_unique_df = None
-    fw.export(os.path.join(BASE_DIR, 'uploads', 'milund_processed'))
-    
-    records, pagination, summary = get_summary_and_pagination(page=1)
-    return render_template_string(HTML_TEMPLATE, summary=summary, preview=records, pagination=pagination)
-
-@app.route('/page')
-def navigate_page():
-    p = request.args.get('p', 1)
-    records, pagination, summary = get_summary_and_pagination(page=p)
-    return render_template_string(HTML_TEMPLATE, summary=summary, preview=records, pagination=pagination)
+        print(f"Error in api_process: {e}", flush=True)
+        return jsonify({'status': 'error', 'error': str(e)}), 500
 
 @app.route('/download/<fmt>')
 def download_file(fmt):
@@ -671,13 +570,11 @@ def download_file(fmt):
     csv_file = os.path.join(BASE_DIR, 'uploads', 'milund_processed.csv')
     xlsx_file = os.path.join(BASE_DIR, 'uploads', 'milund_processed.xlsx')
     
-    # 1. Check if files exist on disk
     if fmt == 'csv' and os.path.exists(csv_file):
         return send_file(csv_file, as_attachment=True, download_name='milund_enriched_data.csv', mimetype='text/csv')
     elif fmt == 'xlsx' and os.path.exists(xlsx_file):
         return send_file(xlsx_file, as_attachment=True, download_name='milund_enriched_data.xlsx', mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     
-    # 2. If latest_df in memory, generate dynamically on the fly
     if latest_df is not None and not latest_df.empty:
         if fmt == 'csv':
             buf = io.StringIO()
@@ -691,12 +588,7 @@ def download_file(fmt):
             mem.seek(0)
             return send_file(mem, as_attachment=True, download_name='milund_enriched_data.xlsx', mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
             
-    # 3. If no file was processed yet, generate default demo and serve download
-    run_default()
-    if fmt == 'csv':
-        return send_file(os.path.join(BASE_DIR, 'uploads', 'milund_processed.csv'), as_attachment=True, download_name='milund_enriched_data.csv', mimetype='text/csv')
-    else:
-        return send_file(os.path.join(BASE_DIR, 'uploads', 'milund_processed.xlsx'), as_attachment=True, download_name='milund_enriched_data.xlsx', mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    return redirect('/')
 
 @app.route('/health')
 def health_check():
