@@ -6,3 +6,4 @@ requests
 matplotlib
 reportlab
 pyTelegramBotAPI
+psycopg2-binary

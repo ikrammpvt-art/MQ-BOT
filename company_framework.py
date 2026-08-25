@@ -48,39 +48,64 @@ try:
 except Exception:
     pass
 
-# Persistent SQLite Cache Database
+# Cloud Database (PostgreSQL / Supabase / Railway Postgres) & Persistent Team Cache Layer
+DATABASE_URL = os.environ.get('DATABASE_URL') or os.environ.get('SUPABASE_DB_URL') or os.environ.get('POSTGRES_URL')
 DB_PATH = os.path.join(os.path.dirname(__file__), 'company_cache.db')
 
-def init_db():
+def get_db_connection():
+    if DATABASE_URL:
+        try:
+            import psycopg2
+            conn = psycopg2.connect(DATABASE_URL)
+            return conn, 'postgres'
+        except Exception:
+            pass
     conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    c.execute('''CREATE TABLE IF NOT EXISTS company_cache
-                 (company_name TEXT PRIMARY KEY, json_data TEXT)''')
-    conn.commit()
-    conn.close()
+    return conn, 'sqlite'
+
+def init_db():
+    try:
+        conn, engine_type = get_db_connection()
+        c = conn.cursor()
+        c.execute('''CREATE TABLE IF NOT EXISTS company_cache
+                     (company_name TEXT PRIMARY KEY, json_data TEXT)''')
+        conn.commit()
+        conn.close()
+    except Exception:
+        pass
 
 init_db()
 
 def get_cached_company(company_name):
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    c.execute("SELECT json_data FROM company_cache WHERE company_name = ?", (company_name.strip(),))
-    row = c.fetchone()
-    conn.close()
-    if row:
-        try:
+    try:
+        conn, engine_type = get_db_connection()
+        c = conn.cursor()
+        placeholder = "%s" if engine_type == 'postgres' else "?"
+        c.execute(f"SELECT json_data FROM company_cache WHERE company_name = {placeholder}", (company_name.strip(),))
+        row = c.fetchone()
+        conn.close()
+        if row:
             return json.loads(row[0])
-        except Exception:
-            return None
+    except Exception:
+        pass
     return None
 
 def save_cached_company(company_name, data_dict):
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    c.execute("INSERT OR REPLACE INTO company_cache (company_name, json_data) VALUES (?, ?)",
-              (company_name.strip(), json.dumps(data_dict)))
-    conn.commit()
-    conn.close()
+    try:
+        conn, engine_type = get_db_connection()
+        c = conn.cursor()
+        if engine_type == 'postgres':
+            c.execute("""INSERT INTO company_cache (company_name, json_data) 
+                         VALUES (%s, %s)
+                         ON CONFLICT (company_name) DO UPDATE SET json_data = EXCLUDED.json_data""",
+                      (company_name.strip(), json.dumps(data_dict)))
+        else:
+            c.execute("INSERT OR REPLACE INTO company_cache (company_name, json_data) VALUES (?, ?)",
+                      (company_name.strip(), json.dumps(data_dict)))
+        conn.commit()
+        conn.close()
+    except Exception:
+        pass
 
 def clean_to_core_brand(name):
     s = re.sub(r'(?i)\b(intl|finance|financial|pharmaceuticals|energy|dev|development|group|bond|co|escrow|securities|j\.s\.c|bvi|holdings|hldgs|holding|intermediate|blocker|inc|llc|ltd|corp|corporation|plc|sa|dac|gmbh|ltd\.|sa|nv|bv)\b', '', name)
