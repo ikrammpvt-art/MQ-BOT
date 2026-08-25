@@ -18,7 +18,7 @@ HTML_TEMPLATE = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gain.ai - Private Market Intelligence & Portfolio Extraction</title>
+    <title>FindWeb - Institutional Portfolio Intelligence & Extraction</title>
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500&family=Mulish:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -502,20 +502,20 @@ HTML_TEMPLATE = """
 </head>
 <body>
 
-    <!-- GAIN.AI TOP NAVIGATION -->
+    <!-- FINDWEB TOP NAVIGATION -->
     <nav>
         <a href="/" class="nav-brand">
-            Gain<span class="dot">.ai</span>
+            FindWeb<span class="dot">.ai</span>
         </a>
         <div class="nav-tag">
-            Private Market Intelligence
+            Institutional Portfolio Intelligence
         </div>
     </nav>
 
     <!-- HERO HEADER -->
     <div class="hero">
         <div class="hero-badge">⚡ Institutional Credit & Private Equity Intelligence</div>
-        <h1>Develop a view on <span class="gradient-text">private companies in minutes</span></h1>
+        <h1>Develop a view on <span class="gradient-text">portfolio companies in minutes</span></h1>
         <p>Deep M&A operating brand resolution, U.S. SEC EDGAR filings, and European statutory registry triage.</p>
     </div>
 
@@ -547,11 +547,11 @@ HTML_TEMPLATE = """
                         <div class="tdot tdot-yellow"></div>
                         <div class="tdot tdot-green"></div>
                     </div>
-                    <div class="terminal-title">Gain.ai Intelligence Engine — Live Stream</div>
+                    <div class="terminal-title">FindWeb Intelligence Engine — Live Stream</div>
                     <div id="terminalPct" style="color: var(--gain-neon-green); font-family: 'Fira Code', monospace; font-size: 0.85rem; font-weight: 700;">0%</div>
                 </div>
                 <div id="terminalLogs" class="terminal-content">
-                    <div class="log-row"><span class="log-time">[SYSTEM]</span> <span class="log-tag">[INIT]</span> Initializing Gain.ai Multi-Tier Intelligence Subsystems...</div>
+                    <div class="log-row"><span class="log-time">[SYSTEM]</span> <span class="log-tag">[INIT]</span> Initializing FindWeb Multi-Tier Intelligence Subsystems...</div>
                 </div>
                 <div class="gain-progress-track">
                     <div id="progressBarFill" class="gain-progress-bar"></div>
@@ -678,7 +678,7 @@ HTML_TEMPLATE = """
             container.innerHTML = `
                 <div class="gain-card">
                     <h2 style="font-size: 1.85rem; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 0.35rem;">Portfolio Intelligence Report</h2>
-                    <p style="color: var(--gain-text-muted); font-size: 0.95rem; margin-bottom: 1.8rem;">Audited & Verified by <strong>Gain.ai + Hermes Watchdog Engine</strong>.</p>
+                    <p style="color: var(--gain-text-muted); font-size: 0.95rem; margin-bottom: 1.8rem;">Audited & Verified by <strong>FindWeb + Hermes Watchdog Engine</strong>.</p>
                     
                     <div class="stats-grid">
                         <div class="stat-card">
