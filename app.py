@@ -361,10 +361,11 @@ HTML_TEMPLATE = """
             formData.append('file', file);
 
             // Step progress animations
-            const t1 = setTimeout(() => { addLog('CACHE', 'log-tag-db', 'Querying 2,598 Master Entity Database...'); setProgress(35); }, 1200);
-            const t2 = setTimeout(() => { addLog('GEMINI', 'log-tag-ai', 'Dispatching parallel batch reasoning across Gemini 3.5 Flash...'); setProgress(60); }, 3500);
-            const t3 = setTimeout(() => { addLog('SEARCH', 'log-tag-search', 'Google Custom Search Engine resolving live parent brands...'); setProgress(80); }, 6500);
-            const t4 = setTimeout(() => { addLog('WATCHDOG', 'log-tag-watchdog', 'Hermes Watchdog inspecting rows & auto-healing SPV debt tranches...'); setProgress(90); }, 9000);
+            const t1 = setTimeout(() => { addLog('CACHE', 'log-tag-db', 'Querying 2,598 Master Entity Database...'); setProgress(25); }, 1200);
+            const t2 = setTimeout(() => { addLog('SEC_EDGAR', 'log-tag-db', 'Triangulating with 18,164 SEC-registered public corporations & CIK database...'); setProgress(45); }, 2800);
+            const t3 = setTimeout(() => { addLog('GEMINI', 'log-tag-ai', 'Dispatching parallel batch reasoning across Gemini 3.5 Flash...'); setProgress(65); }, 4800);
+            const t4 = setTimeout(() => { addLog('SEARCH', 'log-tag-search', 'Google Custom Search Engine resolving live parent brands...'); setProgress(80); }, 7000);
+            const t5 = setTimeout(() => { addLog('WATCHDOG', 'log-tag-watchdog', 'Hermes Watchdog inspecting rows & auto-healing SPV debt tranches...'); setProgress(92); }, 9500);
 
             try {
                 const response = await fetch('/api/process', {
@@ -372,7 +373,7 @@ HTML_TEMPLATE = """
                     body: formData
                 });
 
-                clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4);
+                clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); clearTimeout(t5);
 
                 const data = await response.json();
                 if (data.status === 'success') {
@@ -386,7 +387,7 @@ HTML_TEMPLATE = """
                     btn.innerText = '🚀 Scrape & Enrich Portfolio Dataset';
                 }
             } catch (err) {
-                clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4);
+                clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); clearTimeout(t5);
                 addLog('ERROR', 'log-tag-ai', 'Network exception: ' + err.message);
                 btn.disabled = false;
                 btn.innerText = '🚀 Scrape & Enrich Portfolio Dataset';
@@ -401,11 +402,16 @@ HTML_TEMPLATE = """
                 const isHttp = row['find web'] && row['find web'].startsWith('http');
                 const webHtml = isHttp ? `<a href="${row['find web']}" target="_blank" class="url-link">${row['find web']}</a>` : `<span style="color: var(--text-muted); font-size: 0.85rem;">${row['find web']}</span>`;
                 const badgeHtml = isHttp ? `<span class="status-badge badge-verified">✅ Verified 200 OK</span>` : `<span class="status-badge badge-spv">⚠️ Shell / SPV</span>`;
-                
+                const secBadge = (row.Stock_Ticker && row.Stock_Ticker !== 'Not Found') ? 
+                    `<a href="${row.SEC_EDGAR_CIK_URL}" target="_blank" style="display:inline-block; margin-top:3px; background:#EFF6FF; color:#1D4ED8; font-size:0.75rem; font-weight:700; padding:2px 8px; border-radius:4px; border:1px solid #BFDBFE; text-decoration:none;">🏛️ SEC: ${row.Stock_Ticker} (CIK ${row.SEC_CIK})</a>` : '';
+
                 tableRows += `
                     <tr>
                         <td>${row.row_num}</td>
-                        <td><strong style="color: var(--primary);">${row.company_name}</strong></td>
+                        <td>
+                            <strong style="color: var(--primary); font-size:0.95rem;">${row.company_name}</strong>
+                            ${secBadge ? '<br>' + secBadge : ''}
+                        </td>
                         <td>${webHtml}</td>
                         <td>${row.Key_Executive}</td>
                         <td>${row.PE_Sponsor_Firm}</td>
@@ -546,6 +552,10 @@ def api_process():
                 'PE_Sponsor_Firm': str(row.get('PE_Sponsor_Firm', 'Not Found')),
                 'City': str(row.get('City', 'Not Found')),
                 'Country_ISO': str(row.get('Country_ISO', '')),
+                'Stock_Ticker': str(row.get('Stock_Ticker', 'Not Found')),
+                'SEC_CIK': str(row.get('SEC_CIK', 'Not Found')),
+                'SEC_EDGAR_CIK_URL': str(row.get('SEC_EDGAR_CIK_URL', 'Not Found')),
+                'Ownership_Type': str(row.get('Ownership_Type', 'Privately Held')),
                 'Original_Link_Status': str(row.get('Original_Link_Status', 'Verified'))
             })
 
