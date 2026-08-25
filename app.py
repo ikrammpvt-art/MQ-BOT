@@ -786,7 +786,7 @@ def api_process():
         latest_df = fw.processed_df
         comp_col = fw.comp_col
         latest_unique_df = latest_df.drop_duplicates(subset=[comp_col]).reset_index(drop=True)
-        fw.export(os.path.join(BASE_DIR, 'uploads', 'milund_processed'))
+        fw.export(os.path.join(BASE_DIR, 'uploads', 'findmeweb_processed'))
         
         total_records = len(latest_unique_df)
         total_rows = len(latest_df)
@@ -828,13 +828,13 @@ def api_process():
 @app.route('/download/<fmt>')
 def download_file(fmt):
     global latest_df
-    csv_file = os.path.join(BASE_DIR, 'uploads', 'milund_processed.csv')
-    xlsx_file = os.path.join(BASE_DIR, 'uploads', 'milund_processed.xlsx')
+    csv_file = os.path.join(BASE_DIR, 'uploads', 'findmeweb_processed.csv')
+    xlsx_file = os.path.join(BASE_DIR, 'uploads', 'findmeweb_processed.xlsx')
     
     if fmt == 'csv' and os.path.exists(csv_file):
-        return send_file(csv_file, as_attachment=True, download_name='milund_enriched_data.csv', mimetype='text/csv')
+        return send_file(csv_file, as_attachment=True, download_name='findmeweb_enriched_data.csv', mimetype='text/csv')
     elif fmt == 'xlsx' and os.path.exists(xlsx_file):
-        return send_file(xlsx_file, as_attachment=True, download_name='milund_enriched_data.xlsx', mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        return send_file(xlsx_file, as_attachment=True, download_name='findmeweb_enriched_data.xlsx', mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     
     if latest_df is not None and not latest_df.empty:
         if fmt == 'csv':
@@ -842,12 +842,12 @@ def download_file(fmt):
             latest_df.to_csv(buf, index=False)
             mem = io.BytesIO(buf.getvalue().encode('utf-8'))
             mem.seek(0)
-            return send_file(mem, as_attachment=True, download_name='milund_enriched_data.csv', mimetype='text/csv')
+            return send_file(mem, as_attachment=True, download_name='findmeweb_enriched_data.csv', mimetype='text/csv')
         else:
             mem = io.BytesIO()
             latest_df.to_excel(mem, index=False, engine='openpyxl')
             mem.seek(0)
-            return send_file(mem, as_attachment=True, download_name='milund_enriched_data.xlsx', mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            return send_file(mem, as_attachment=True, download_name='findmeweb_enriched_data.xlsx', mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
             
     return redirect('/')
 

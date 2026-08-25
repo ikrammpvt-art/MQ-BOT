@@ -69,7 +69,7 @@ if bot:
             fw.detect_anomalies()
             fw.process_and_enrich()
 
-            output_base = os.path.join("/tmp", f"milund_enriched_{int(time.time())}")
+            output_base = os.path.join("/tmp", f"findmeweb_enriched_{int(time.time())}")
             print(f"[Telegram Bot] Exporting enriched files to {output_base}...", flush=True)
             csv_out, xlsx_out = fw.export(output_base)
 
@@ -101,7 +101,7 @@ if bot:
                 bot.send_document(
                     message.chat.id, 
                     f_csv, 
-                    visible_file_name=f"milund_enriched_{base_clean_name}.csv",
+                    visible_file_name=f"findmeweb_enriched_{base_clean_name}.csv",
                     caption="🍏 *Apple Numbers Compatible CSV (Hermes Enriched)*",
                     parse_mode="Markdown"
                 )
@@ -112,7 +112,7 @@ if bot:
                 bot.send_document(
                     message.chat.id, 
                     f_xlsx, 
-                    visible_file_name=f"milund_enriched_{base_clean_name}.xlsx",
+                    visible_file_name=f"findmeweb_enriched_{base_clean_name}.xlsx",
                     caption="📊 *Clean Excel Workbook (.xlsx)*",
                     parse_mode="Markdown"
                 )
