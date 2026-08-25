@@ -177,13 +177,21 @@ def free_multi_source_scrape(company_name, industry_context='Commercial Enterpri
         'status_flag': 'Verified (Live Multi-Source Scraper)' if web_url.startswith('http') else 'Not Found (SPV / Holding Entity)'
     }
 
-GEMINI_API_KEY = (os.environ.get('GEMINI_API_KEY') or os.environ.get('GOOGLE_API_KEY') or '').strip()
+keys_env = os.environ.get('GEMINI_API_KEYS', '')
+GEMINI_KEYS = [k.strip() for k in keys_env.split(',') if k.strip()]
+if not GEMINI_KEYS:
+    for k_name in ['GEMINI_API_KEY', 'GEMINI_API_KEY_1', 'GEMINI_API_KEY_2', 'GEMINI_API_KEY_3', 'GOOGLE_API_KEY']:
+        val = os.environ.get(k_name, '').strip()
+        if val and val not in GEMINI_KEYS:
+            GEMINI_KEYS.append(val)
+
+GEMINI_API_KEY = GEMINI_KEYS[0] if GEMINI_KEYS else ''
 
 # Smart Free-First → Paid Fallback Tracker
 _gemini_free_exhausted = False
 
-def gemini_enrich_batch(companies_with_context, max_retries=4):
-    if not GEMINI_API_KEY or not companies_with_context:
+def gemini_enrich_batch(companies_with_context, max_retries=5):
+    if not companies_with_context:
         return {}
 
     prompt = f'''You are an institutional financial & private equity intelligence research engine.
@@ -202,7 +210,8 @@ Return a valid JSON Object with a "results" array matching fields: company_name,
 
     for attempt in range(max_retries):
         model = models_to_try[attempt % len(models_to_try)]
-        url = f'https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={GEMINI_API_KEY}'
+        key = GEMINI_KEYS[attempt % len(GEMINI_KEYS)]
+        url = f'https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={key}'
         req_body = {'contents': [{'parts': [{'text': prompt}]}], 'generationConfig': {'responseMimeType': 'application/json'}}
 
         try:
