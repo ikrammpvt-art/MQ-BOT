@@ -22,20 +22,21 @@ HTML_TEMPLATE = """
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500&family=Mulish:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --gain-dark: #090514;
-            --gain-card: rgba(255, 255, 255, 0.025);
-            --gain-card-hover: rgba(255, 255, 255, 0.04);
+            --canvas-bg: #FFFFFF;
+            --card-bg: #FFFFFF;
+            --card-bg-subtle: #FAFAFE;
+            --primary-text: #0F0726;
+            --secondary-text: #616786;
+            --muted-text: #8E93AB;
             --gain-purple: #632BFC;
             --gain-purple-light: #7873FE;
-            --gain-purple-glow: rgba(99, 43, 252, 0.45);
+            --gain-purple-glow: rgba(99, 43, 252, 0.35);
             --gain-indigo: #2E1BFF;
-            --gain-neon-green: #5AED7C;
-            --gain-neon-green-bg: rgba(90, 237, 124, 0.12);
-            --gain-text-main: #FFFFFF;
-            --gain-text-muted: #939596;
-            --gain-text-sub: #CED1FF;
-            --gain-border: rgba(255, 255, 255, 0.08);
-            --gain-border-purple: rgba(99, 43, 252, 0.35);
+            --gain-green: #059669;
+            --gain-green-bg: #ECFDF5;
+            --gain-green-border: #A7F3D0;
+            --gain-border: rgba(99, 43, 252, 0.12);
+            --gain-border-subtle: #ECEAFE;
             --radius-card: 20px;
             --radius-pill: 980px;
         }
@@ -49,26 +50,24 @@ HTML_TEMPLATE = """
         }
 
         body {
-            background-color: var(--gain-dark);
+            background-color: var(--canvas-bg);
             background-image: 
-                radial-gradient(circle at 50% -15%, rgba(99, 43, 252, 0.3) 0%, rgba(46, 27, 255, 0.12) 35%, transparent 70%),
-                radial-gradient(circle at 85% 30%, rgba(99, 43, 252, 0.08) 0%, transparent 50%),
-                radial-gradient(circle at 15% 60%, rgba(46, 27, 255, 0.06) 0%, transparent 40%);
+                radial-gradient(circle at 50% -10%, rgba(99, 43, 252, 0.07) 0%, rgba(46, 27, 255, 0.03) 40%, #FFFFFF 70%);
             background-attachment: fixed;
-            color: var(--gain-text-main);
+            color: var(--primary-text);
             min-height: 100vh;
             line-height: 1.5;
         }
 
-        /* GAIN.AI GLASS NAVIGATION */
+        /* FROSTED WHITE NAVIGATION */
         nav {
             position: sticky;
             top: 0;
             z-index: 100;
-            background: rgba(9, 5, 20, 0.75);
+            background: rgba(255, 255, 255, 0.88);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--gain-border);
+            border-bottom: 1px solid var(--gain-border-subtle);
             padding: 1.1rem 2.5rem;
             display: flex;
             align-items: center;
@@ -79,11 +78,11 @@ HTML_TEMPLATE = """
             font-size: 1.35rem;
             font-weight: 800;
             letter-spacing: -0.04em;
-            color: #FFFFFF;
+            color: var(--primary-text);
             text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 0.6rem;
+            gap: 0.5rem;
         }
 
         .nav-brand span.dot {
@@ -91,15 +90,15 @@ HTML_TEMPLATE = """
         }
 
         .nav-tag {
-            background: rgba(99, 43, 252, 0.18);
-            color: var(--gain-text-sub);
-            border: 1px solid var(--gain-border-purple);
+            background: #F3F0FF;
+            color: var(--gain-purple);
+            border: 1px solid rgba(99, 43, 252, 0.2);
             font-size: 0.72rem;
-            font-weight: 600;
-            padding: 3px 10px;
+            font-weight: 700;
+            padding: 4px 12px;
             border-radius: var(--radius-pill);
             text-transform: uppercase;
-            letter-spacing: 0.08em;
+            letter-spacing: 0.06em;
         }
 
         /* HERO SECTION */
@@ -114,12 +113,12 @@ HTML_TEMPLATE = """
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--gain-text-sub);
+            background: #F3F0FF;
+            border: 1px solid rgba(99, 43, 252, 0.2);
+            color: var(--gain-purple);
             font-size: 0.82rem;
-            font-weight: 600;
-            padding: 6px 14px;
+            font-weight: 700;
+            padding: 6px 16px;
             border-radius: var(--radius-pill);
             margin-bottom: 1.5rem;
         }
@@ -128,13 +127,13 @@ HTML_TEMPLATE = """
             font-size: 3.4rem;
             font-weight: 800;
             letter-spacing: -0.05em;
-            color: #FFFFFF;
+            color: var(--primary-text);
             margin-bottom: 1rem;
             line-height: 1.1;
         }
 
         .hero h1 span.gradient-text {
-            background: linear-gradient(135deg, #FFFFFF 30%, #A6A9FF 70%, #632BFC 100%);
+            background: linear-gradient(135deg, #0F0726 20%, #632BFC 75%, #2E1BFF 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -142,7 +141,7 @@ HTML_TEMPLATE = """
         .hero p {
             font-size: 1.2rem;
             font-weight: 400;
-            color: var(--gain-text-muted);
+            color: var(--secondary-text);
             letter-spacing: -0.015em;
             line-height: 1.5;
             max-width: 720px;
@@ -155,37 +154,31 @@ HTML_TEMPLATE = """
             padding: 0 1.5rem;
         }
 
-        /* GAIN.AI GLASS CARD */
+        /* CLEAN WHITE GAIN CARD */
         .gain-card {
-            background: var(--gain-card);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid var(--gain-border);
+            background: var(--card-bg);
+            border: 1px solid var(--gain-border-subtle);
             border-radius: var(--radius-card);
             padding: 2.8rem;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 12px 40px rgba(99, 43, 252, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02);
             margin-bottom: 2rem;
             transition: all 0.3s ease;
         }
 
-        .gain-card:hover {
-            border-color: rgba(99, 43, 252, 0.3);
-        }
-
         /* DROPZONE */
         .upload-dropzone {
-            border: 1.5px dashed rgba(99, 43, 252, 0.4);
+            border: 1.5px dashed rgba(99, 43, 252, 0.35);
             border-radius: 16px;
             padding: 3.5rem 2rem;
             text-align: center;
             cursor: pointer;
-            background: rgba(99, 43, 252, 0.03);
+            background: var(--card-bg-subtle);
             transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
             margin-bottom: 2rem;
         }
 
         .upload-dropzone:hover {
-            background: rgba(99, 43, 252, 0.08);
+            background: #F3F0FF;
             border-color: var(--gain-purple);
             transform: translateY(-2px);
         }
@@ -193,20 +186,20 @@ HTML_TEMPLATE = """
         .upload-icon {
             font-size: 3rem;
             margin-bottom: 1rem;
-            color: var(--gain-purple-light);
+            color: var(--gain-purple);
         }
 
         .upload-title {
             font-size: 1.4rem;
             font-weight: 700;
             letter-spacing: -0.03em;
-            color: #FFFFFF;
+            color: var(--primary-text);
             margin-bottom: 0.4rem;
         }
 
         .upload-subtitle {
             font-size: 0.95rem;
-            color: var(--gain-text-muted);
+            color: var(--secondary-text);
             margin-bottom: 1.5rem;
         }
 
@@ -234,12 +227,12 @@ HTML_TEMPLATE = """
             cursor: pointer;
             transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
             text-decoration: none;
-            box-shadow: 0 4px 25px var(--gain-purple-glow);
+            box-shadow: 0 4px 20px var(--gain-purple-glow);
         }
 
         .btn-gain-primary:hover {
             transform: scale(1.02);
-            box-shadow: 0 8px 35px rgba(99, 43, 252, 0.65);
+            box-shadow: 0 8px 30px rgba(99, 43, 252, 0.55);
         }
 
         .btn-gain-primary:active {
@@ -247,37 +240,38 @@ HTML_TEMPLATE = """
         }
 
         .btn-gain-primary:disabled {
-            background: #231C38;
-            color: #6C687D;
+            background: #D8D6E5;
+            color: #8E8A9E;
             box-shadow: none;
             cursor: not-allowed;
             transform: none;
         }
 
         .btn-browse-file {
-            background: rgba(255, 255, 255, 0.08);
-            color: #FFFFFF;
+            background: #FFFFFF;
+            color: var(--primary-text);
             padding: 0.7rem 1.5rem;
             border-radius: var(--radius-pill);
             font-size: 0.9rem;
             font-weight: 600;
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            border: 1px solid var(--gain-border-subtle);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
             cursor: pointer;
             transition: all 0.2s ease;
         }
 
         .btn-browse-file:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.25);
+            background: #F3F0FF;
+            border-color: var(--gain-purple);
         }
 
         .btn-green-download {
             background: linear-gradient(135deg, #059669 0%, #10B981 100%);
-            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.35);
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
         }
 
         .btn-green-download:hover {
-            box-shadow: 0 6px 25px rgba(16, 185, 129, 0.5);
+            box-shadow: 0 6px 25px rgba(16, 185, 129, 0.45);
         }
 
         /* TERMINAL */
@@ -287,15 +281,15 @@ HTML_TEMPLATE = """
             border-radius: 16px;
             padding: 1.5rem;
             margin-top: 2rem;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-            border: 1px solid var(--gain-border-purple);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+            border: 1px solid rgba(99, 43, 252, 0.3);
         }
 
         .terminal-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             padding-bottom: 0.8rem;
             margin-bottom: 1rem;
         }
@@ -307,7 +301,7 @@ HTML_TEMPLATE = """
         .tdot-green { background: #27C93F; }
 
         .terminal-title {
-            color: var(--gain-text-sub);
+            color: #CED1FF;
             font-family: 'Fira Code', monospace;
             font-size: 0.8rem;
             font-weight: 500;
@@ -327,12 +321,12 @@ HTML_TEMPLATE = """
         .log-tag { color: #A6A9FF; font-weight: 600; }
         .log-sec { color: #7873FE; font-weight: 600; }
         .log-watchdog { color: #FBBF24; font-weight: 600; }
-        .log-success { color: var(--gain-neon-green); font-weight: 600; }
+        .log-success { color: #5AED7C; font-weight: 600; }
 
         .gain-progress-track {
             width: 100%;
             height: 6px;
-            background: rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, 0.08);
             border-radius: var(--radius-pill);
             overflow: hidden;
             margin-top: 1.2rem;
@@ -360,8 +354,8 @@ HTML_TEMPLATE = """
         }
 
         .stat-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--gain-border);
+            background: var(--card-bg-subtle);
+            border: 1px solid var(--gain-border-subtle);
             padding: 1.8rem;
             border-radius: 16px;
             text-align: center;
@@ -371,14 +365,14 @@ HTML_TEMPLATE = """
             font-size: 2.6rem;
             font-weight: 800;
             letter-spacing: -0.04em;
-            color: #FFFFFF;
+            color: var(--primary-text);
             line-height: 1.1;
         }
 
         .stat-lbl {
             font-size: 0.78rem;
-            color: var(--gain-text-sub);
-            font-weight: 600;
+            color: var(--secondary-text);
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.08em;
             margin-top: 0.4rem;
@@ -386,8 +380,8 @@ HTML_TEMPLATE = """
 
         /* DOWNLOAD BANNER */
         .download-box {
-            background: rgba(99, 43, 252, 0.08);
-            border: 1px solid var(--gain-border-purple);
+            background: #F4FBF7;
+            border: 1px solid var(--gain-green-border);
             border-radius: 18px;
             padding: 2.2rem;
             text-align: center;
@@ -395,7 +389,7 @@ HTML_TEMPLATE = """
         }
 
         .download-box h3 {
-            color: #FFFFFF;
+            color: #065F46;
             font-size: 1.35rem;
             font-weight: 700;
             letter-spacing: -0.02em;
@@ -403,7 +397,7 @@ HTML_TEMPLATE = """
         }
 
         .download-box p {
-            color: var(--gain-text-muted);
+            color: #047857;
             font-size: 0.95rem;
             margin-bottom: 1.5rem;
         }
@@ -413,19 +407,19 @@ HTML_TEMPLATE = """
             width: 100%;
             padding: 0.95rem 1.4rem;
             border-radius: 12px;
-            border: 1px solid var(--gain-border);
+            border: 1px solid var(--gain-border-subtle);
             font-size: 0.95rem;
             outline: none;
-            background: rgba(255, 255, 255, 0.03);
-            color: #FFFFFF;
+            background: var(--card-bg-subtle);
+            color: var(--primary-text);
             margin-bottom: 1.5rem;
             transition: all 0.2s ease;
         }
 
         .search-field:focus {
-            background: rgba(255, 255, 255, 0.06);
+            background: #FFFFFF;
             border-color: var(--gain-purple);
-            box-shadow: 0 0 0 3px rgba(99, 43, 252, 0.25);
+            box-shadow: 0 0 0 3px rgba(99, 43, 252, 0.15);
         }
 
         table {
@@ -436,21 +430,21 @@ HTML_TEMPLATE = """
         th, td {
             padding: 1.1rem 1.2rem;
             text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            border-bottom: 1px solid #F1F0FA;
             font-size: 0.92rem;
             vertical-align: middle;
         }
 
         th {
-            background: rgba(255, 255, 255, 0.02);
-            color: var(--gain-text-sub);
-            font-weight: 600;
+            background: var(--card-bg-subtle);
+            color: var(--secondary-text);
+            font-weight: 700;
             font-size: 0.78rem;
             text-transform: uppercase;
             letter-spacing: 0.08em;
         }
 
-        tr:hover { background: rgba(255, 255, 255, 0.025); }
+        tr:hover { background: #FAF9FE; }
 
         .pill-badge {
             padding: 0.35rem 0.85rem;
@@ -462,37 +456,37 @@ HTML_TEMPLATE = """
             gap: 0.35rem;
         }
 
-        .badge-verified { background: var(--gain-neon-green-bg); color: var(--gain-neon-green); border: 1px solid rgba(90, 237, 124, 0.25); }
-        .badge-spv { background: rgba(251, 191, 36, 0.1); color: #FBBF24; border: 1px solid rgba(251, 191, 36, 0.25); }
+        .badge-verified { background: #DCFCE7; color: #166534; }
+        .badge-spv { background: #FEF3C7; color: #92400E; }
 
         .company-url {
-            color: #7873FE;
+            color: var(--gain-purple);
             font-weight: 600;
             text-decoration: none;
             word-break: break-all;
         }
 
-        .company-url:hover { text-decoration: underline; color: #A6A9FF; }
+        .company-url:hover { text-decoration: underline; }
 
         .sec-pill {
             display: inline-block;
             margin-top: 4px;
-            background: rgba(99, 43, 252, 0.2);
-            color: #CED1FF;
+            background: #EEF2FF;
+            color: #4F46E5;
             font-size: 0.72rem;
             font-weight: 700;
             padding: 2px 8px;
             border-radius: 4px;
-            border: 1px solid rgba(99, 43, 252, 0.4);
+            border: 1px solid #C7D2FE;
             text-decoration: none;
         }
 
         .alert-toast {
-            background-color: rgba(239, 68, 68, 0.15);
-            color: #FCA5A5;
+            background-color: #FEF2F2;
+            color: #991B1B;
             padding: 1rem 1.5rem;
             border-radius: 12px;
-            border: 1px solid rgba(239, 68, 68, 0.3);
+            border: 1px solid #FECACA;
             margin-bottom: 1.5rem;
             text-align: center;
             font-weight: 600;
@@ -548,7 +542,7 @@ HTML_TEMPLATE = """
                         <div class="tdot tdot-green"></div>
                     </div>
                     <div class="terminal-title">FindWeb Intelligence Engine — Live Stream</div>
-                    <div id="terminalPct" style="color: var(--gain-neon-green); font-family: 'Fira Code', monospace; font-size: 0.85rem; font-weight: 700;">0%</div>
+                    <div id="terminalPct" style="color: #5AED7C; font-family: 'Fira Code', monospace; font-size: 0.85rem; font-weight: 700;">0%</div>
                 </div>
                 <div id="terminalLogs" class="terminal-content">
                     <div class="log-row"><span class="log-time">[SYSTEM]</span> <span class="log-tag">[INIT]</span> Initializing FindWeb Multi-Tier Intelligence Subsystems...</div>
@@ -570,7 +564,7 @@ HTML_TEMPLATE = """
             const input = document.getElementById('fileInput');
             if (input.files.length > 0) {
                 selectedFile = input.files[0];
-                document.getElementById('uploadLabel').innerHTML = "Selected: <strong style='color:#FFFFFF;'>" + selectedFile.name + "</strong>";
+                document.getElementById('uploadLabel').innerHTML = "Selected: <strong style='color:var(--gain-purple);'>" + selectedFile.name + "</strong>";
                 document.getElementById('errorAlert').style.display = 'none';
             }
         }
@@ -654,16 +648,16 @@ HTML_TEMPLATE = """
             let tableRows = '';
             data.preview.forEach(row => {
                 const isHttp = row['find web'] && row['find web'].startsWith('http');
-                const webHtml = isHttp ? `<a href="${row['find web']}" target="_blank" class="company-url">${row['find web']}</a>` : `<span style="color: var(--gain-text-muted); font-size: 0.85rem;">${row['find web']}</span>`;
+                const webHtml = isHttp ? `<a href="${row['find web']}" target="_blank" class="company-url">${row['find web']}</a>` : `<span style="color: var(--secondary-text); font-size: 0.85rem;">${row['find web']}</span>`;
                 const badgeHtml = isHttp ? `<span class="pill-badge badge-verified">✅ Verified 200 OK</span>` : `<span class="pill-badge badge-spv">⚠️ Shell / SPV</span>`;
                 const secBadge = (row.Stock_Ticker && row.Stock_Ticker !== 'Not Found') ? 
                     `<a href="${row.SEC_EDGAR_CIK_URL}" target="_blank" class="sec-pill">🏛️ SEC: ${row.Stock_Ticker} (${row.SEC_CIK})</a>` : '';
 
                 tableRows += `
                     <tr>
-                        <td style="color: var(--gain-text-muted); font-weight: 500;">${row.row_num}</td>
+                        <td style="color: var(--muted-text); font-weight: 500;">${row.row_num}</td>
                         <td>
-                            <strong style="color: #FFFFFF; font-size: 0.95rem;">${row.company_name}</strong>
+                            <strong style="color: var(--primary-text); font-size: 0.95rem;">${row.company_name}</strong>
                             ${secBadge ? '<br>' + secBadge : ''}
                         </td>
                         <td>${webHtml}</td>
@@ -678,7 +672,7 @@ HTML_TEMPLATE = """
             container.innerHTML = `
                 <div class="gain-card">
                     <h2 style="font-size: 1.85rem; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 0.35rem;">Portfolio Intelligence Report</h2>
-                    <p style="color: var(--gain-text-muted); font-size: 0.95rem; margin-bottom: 1.8rem;">Audited & Verified by <strong>FindWeb + Hermes Watchdog Engine</strong>.</p>
+                    <p style="color: var(--secondary-text); font-size: 0.95rem; margin-bottom: 1.8rem;">Audited & Verified by <strong>FindWeb + Hermes Watchdog Engine</strong>.</p>
                     
                     <div class="stats-grid">
                         <div class="stat-card">
@@ -690,11 +684,11 @@ HTML_TEMPLATE = """
                             <div class="stat-lbl">Operating Entities</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-val" style="color: var(--gain-neon-green);">${data.summary.verified_pct}%</div>
+                            <div class="stat-val" style="color: var(--gain-green);">${data.summary.verified_pct}%</div>
                             <div class="stat-lbl">Verified Hit Rate</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-val" style="color: #A6A9FF;">18</div>
+                            <div class="stat-val" style="color: var(--gain-purple);">18</div>
                             <div class="stat-lbl">Enriched Fields</div>
                         </div>
                     </div>
@@ -854,7 +848,7 @@ def download_file(fmt):
 
 @app.route('/health')
 def health_check():
-    return jsonify({"status": "healthy", "service": "Gain.ai Private Market Intelligence"})
+    return jsonify({"status": "healthy", "service": "FindWeb Institutional Portfolio Intelligence"})
 
 def start_telegram_bot_daemon():
     token = os.environ.get("TELEGRAM_BOT_TOKEN", "8858180700:AAG8wT-nFBHTs907QQbl6R63rm8mDDslxxc").strip()
@@ -884,5 +878,5 @@ start_telegram_bot_daemon()
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 8080))
-    print(f"Starting Gain.ai Private Market Intelligence Portal on port {port} ...", flush=True)
+    print(f"Starting FindWeb Intelligence Portal on port {port} ...", flush=True)
     app.run(host='0.0.0.0', port=port, debug=False)
