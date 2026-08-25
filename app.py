@@ -18,24 +18,25 @@ HTML_TEMPLATE = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FindWeb - Institutional Portfolio Intelligence</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <title>Gain.ai - Private Market Intelligence & Portfolio Extraction</title>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500&family=Mulish:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-canvas: #F5F5F7;
-            --card-bg: #FFFFFF;
-            --text-primary: #1D1D1F;
-            --text-secondary: #86868B;
-            --text-tertiary: #A1A1A6;
-            --apple-blue: #0071E3;
-            --apple-blue-hover: #0077ED;
-            --apple-green: #34C759;
-            --apple-green-hover: #30B753;
-            --border-light: rgba(0, 0, 0, 0.06);
-            --border-card: #E5E5EA;
-            --shadow-subtle: 0 4px 20px rgba(0, 0, 0, 0.04);
-            --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.08);
-            --radius-card: 22px;
+            --gain-dark: #090514;
+            --gain-card: rgba(255, 255, 255, 0.025);
+            --gain-card-hover: rgba(255, 255, 255, 0.04);
+            --gain-purple: #632BFC;
+            --gain-purple-light: #7873FE;
+            --gain-purple-glow: rgba(99, 43, 252, 0.45);
+            --gain-indigo: #2E1BFF;
+            --gain-neon-green: #5AED7C;
+            --gain-neon-green-bg: rgba(90, 237, 124, 0.12);
+            --gain-text-main: #FFFFFF;
+            --gain-text-muted: #939596;
+            --gain-text-sub: #CED1FF;
+            --gain-border: rgba(255, 255, 255, 0.08);
+            --gain-border-purple: rgba(99, 43, 252, 0.35);
+            --radius-card: 20px;
             --radius-pill: 980px;
         }
 
@@ -43,229 +44,270 @@ HTML_TEMPLATE = """
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-family: 'Geist', 'Mulish', -apple-system, sans-serif;
             -webkit-font-smoothing: antialiased;
         }
 
         body {
-            background-color: var(--bg-canvas);
-            color: var(--text-primary);
+            background-color: var(--gain-dark);
+            background-image: 
+                radial-gradient(circle at 50% -15%, rgba(99, 43, 252, 0.3) 0%, rgba(46, 27, 255, 0.12) 35%, transparent 70%),
+                radial-gradient(circle at 85% 30%, rgba(99, 43, 252, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 15% 60%, rgba(46, 27, 255, 0.06) 0%, transparent 40%);
+            background-attachment: fixed;
+            color: var(--gain-text-main);
+            min-height: 100vh;
             line-height: 1.5;
         }
 
-        /* APPLE FROSTED GLASS NAVIGATION */
+        /* GAIN.AI GLASS NAVIGATION */
         nav {
             position: sticky;
             top: 0;
             z-index: 100;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: saturate(180%) blur(20px);
-            -webkit-backdrop-filter: saturate(180%) blur(20px);
-            border-bottom: 1px solid var(--border-light);
-            padding: 1rem 2rem;
+            background: rgba(9, 5, 20, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--gain-border);
+            padding: 1.1rem 2.5rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
-        .nav-logo {
-            font-size: 1.15rem;
-            font-weight: 700;
-            letter-spacing: -0.03em;
-            color: var(--text-primary);
+        .nav-brand {
+            font-size: 1.35rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            color: #FFFFFF;
+            text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            text-decoration: none;
+            gap: 0.6rem;
         }
 
-        .nav-badge {
-            background: #F2F2F7;
-            color: var(--text-secondary);
-            font-size: 0.75rem;
+        .nav-brand span.dot {
+            color: var(--gain-purple);
+        }
+
+        .nav-tag {
+            background: rgba(99, 43, 252, 0.18);
+            color: var(--gain-text-sub);
+            border: 1px solid var(--gain-border-purple);
+            font-size: 0.72rem;
             font-weight: 600;
-            padding: 3px 9px;
+            padding: 3px 10px;
             border-radius: var(--radius-pill);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
         }
 
-        /* APPLE HERO SECTION */
+        /* HERO SECTION */
         .hero {
             text-align: center;
-            padding: 4rem 1.5rem 2.5rem;
-            max-width: 850px;
+            padding: 4.5rem 1.5rem 2.5rem;
+            max-width: 900px;
             margin: 0 auto;
         }
 
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--gain-text-sub);
+            font-size: 0.82rem;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: var(--radius-pill);
+            margin-bottom: 1.5rem;
+        }
+
         .hero h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            letter-spacing: -0.04em;
-            color: var(--text-primary);
-            margin-bottom: 0.75rem;
+            font-size: 3.4rem;
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            color: #FFFFFF;
+            margin-bottom: 1rem;
             line-height: 1.1;
         }
 
+        .hero h1 span.gradient-text {
+            background: linear-gradient(135deg, #FFFFFF 30%, #A6A9FF 70%, #632BFC 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
         .hero p {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             font-weight: 400;
-            color: var(--text-secondary);
+            color: var(--gain-text-muted);
             letter-spacing: -0.015em;
-            line-height: 1.4;
+            line-height: 1.5;
+            max-width: 720px;
+            margin: 0 auto;
         }
 
         .container {
-            max-width: 1250px;
+            max-width: 1280px;
             margin: 0 auto 5rem;
             padding: 0 1.5rem;
         }
 
-        /* APPLE CLEAN CARD */
-        .apple-card {
-            background: var(--card-bg);
+        /* GAIN.AI GLASS CARD */
+        .gain-card {
+            background: var(--gain-card);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--gain-border);
             border-radius: var(--radius-card);
-            padding: 2.5rem;
-            box-shadow: var(--shadow-subtle);
-            border: 1px solid var(--border-light);
+            padding: 2.8rem;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
             margin-bottom: 2rem;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.3s ease;
         }
 
-        /* MINIMALIST UPLOAD DROPZONE */
+        .gain-card:hover {
+            border-color: rgba(99, 43, 252, 0.3);
+        }
+
+        /* DROPZONE */
         .upload-dropzone {
-            border: 1.5px dashed #D2D2D7;
-            border-radius: 18px;
+            border: 1.5px dashed rgba(99, 43, 252, 0.4);
+            border-radius: 16px;
             padding: 3.5rem 2rem;
             text-align: center;
             cursor: pointer;
-            background-color: #FAFAFC;
-            transition: all 0.25s ease;
+            background: rgba(99, 43, 252, 0.03);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
             margin-bottom: 2rem;
         }
 
         .upload-dropzone:hover {
-            background-color: #F0F5FF;
-            border-color: var(--apple-blue);
+            background: rgba(99, 43, 252, 0.08);
+            border-color: var(--gain-purple);
+            transform: translateY(-2px);
         }
 
         .upload-icon {
             font-size: 3rem;
             margin-bottom: 1rem;
-            color: var(--apple-blue);
-            opacity: 0.9;
+            color: var(--gain-purple-light);
         }
 
         .upload-title {
-            font-size: 1.35rem;
-            font-weight: 600;
-            letter-spacing: -0.02em;
-            color: var(--text-primary);
-            margin-bottom: 0.35rem;
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: #FFFFFF;
+            margin-bottom: 0.4rem;
         }
 
         .upload-subtitle {
             font-size: 0.95rem;
-            color: var(--text-secondary);
+            color: var(--gain-text-muted);
             margin-bottom: 1.5rem;
         }
 
         input[type="file"] { display: none; }
 
-        /* APPLE BUTTON SYSTEM */
+        /* BUTTONS */
         .btn-center-wrapper {
             display: flex;
             justify-content: center;
         }
 
-        .btn-apple {
+        .btn-gain-primary {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
-            background: var(--apple-blue);
-            color: white;
-            padding: 1rem 2.5rem;
+            gap: 0.6rem;
+            background: linear-gradient(135deg, #632BFC 0%, #2E1BFF 100%);
+            color: #FFFFFF;
+            padding: 1.05rem 2.8rem;
             border-radius: var(--radius-pill);
-            font-weight: 600;
-            font-size: 1rem;
-            letter-spacing: -0.01em;
+            font-weight: 700;
+            font-size: 1.05rem;
+            letter-spacing: -0.02em;
             border: none;
             cursor: pointer;
             transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
             text-decoration: none;
-            box-shadow: 0 4px 14px rgba(0, 113, 227, 0.25);
+            box-shadow: 0 4px 25px var(--gain-purple-glow);
         }
 
-        .btn-apple:hover {
-            background: var(--apple-blue-hover);
+        .btn-gain-primary:hover {
             transform: scale(1.02);
-            box-shadow: 0 6px 20px rgba(0, 113, 227, 0.35);
+            box-shadow: 0 8px 35px rgba(99, 43, 252, 0.65);
         }
 
-        .btn-apple:active {
+        .btn-gain-primary:active {
             transform: scale(0.98);
         }
 
-        .btn-apple:disabled {
-            background: #D2D2D7;
+        .btn-gain-primary:disabled {
+            background: #231C38;
+            color: #6C687D;
             box-shadow: none;
             cursor: not-allowed;
             transform: none;
         }
 
         .btn-browse-file {
-            background: #E8E8ED;
-            color: var(--text-primary);
-            padding: 0.65rem 1.4rem;
+            background: rgba(255, 255, 255, 0.08);
+            color: #FFFFFF;
+            padding: 0.7rem 1.5rem;
             border-radius: var(--radius-pill);
             font-size: 0.9rem;
             font-weight: 600;
-            border: none;
+            border: 1px solid rgba(255, 255, 255, 0.12);
             cursor: pointer;
             transition: all 0.2s ease;
         }
 
         .btn-browse-file:hover {
-            background: #DCDCE2;
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.25);
         }
 
-        .btn-green {
-            background: var(--apple-green);
-            box-shadow: 0 4px 14px rgba(52, 199, 89, 0.25);
+        .btn-green-download {
+            background: linear-gradient(135deg, #059669 0%, #10B981 100%);
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.35);
         }
 
-        .btn-green:hover {
-            background: var(--apple-green-hover);
-            box-shadow: 0 6px 20px rgba(52, 199, 89, 0.35);
+        .btn-green-download:hover {
+            box-shadow: 0 6px 25px rgba(16, 185, 129, 0.5);
         }
 
-        /* macOS TERMINAL WINDOW */
-        .macos-terminal {
+        /* TERMINAL */
+        .terminal-box {
             display: none;
-            background: #161618;
+            background: #0D081D;
             border-radius: 16px;
             padding: 1.5rem;
             margin-top: 2rem;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            border: 1px solid #2C2C2E;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            border: 1px solid var(--gain-border-purple);
         }
 
-        .macos-header {
+        .terminal-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid #2C2C2E;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
             padding-bottom: 0.8rem;
             margin-bottom: 1rem;
         }
 
-        .traffic-lights { display: flex; gap: 7px; }
-        .light { width: 11px; height: 11px; border-radius: 50%; }
-        .light-red { background: #FF5F56; }
-        .light-yellow { background: #FFBD2E; }
-        .light-green { background: #27C93F; }
+        .terminal-dots { display: flex; gap: 7px; }
+        .tdot { width: 10px; height: 10px; border-radius: 50%; }
+        .tdot-red { background: #FF5F56; }
+        .tdot-yellow { background: #FFBD2E; }
+        .tdot-green { background: #27C93F; }
 
-        .terminal-status-text {
-            color: #86868B;
+        .terminal-title {
+            color: var(--gain-text-sub);
             font-family: 'Fira Code', monospace;
             font-size: 0.8rem;
             font-weight: 500;
@@ -274,32 +316,32 @@ HTML_TEMPLATE = """
         .terminal-content {
             font-family: 'Fira Code', monospace;
             font-size: 0.85rem;
-            color: #F5F5F7;
+            color: #E2E8F0;
             max-height: 240px;
             overflow-y: auto;
             line-height: 1.7;
         }
 
         .log-row { margin-bottom: 0.35rem; display: flex; gap: 0.6rem; animation: fadeIn 0.3s ease; }
-        .log-timestamp { color: #636366; }
-        .log-tag { color: #0A84FF; font-weight: 600; }
-        .log-sec { color: #5E5CE6; font-weight: 600; }
-        .log-watchdog { color: #FF9F0A; font-weight: 600; }
-        .log-success { color: #30D158; font-weight: 600; }
+        .log-time { color: #64748B; }
+        .log-tag { color: #A6A9FF; font-weight: 600; }
+        .log-sec { color: #7873FE; font-weight: 600; }
+        .log-watchdog { color: #FBBF24; font-weight: 600; }
+        .log-success { color: var(--gain-neon-green); font-weight: 600; }
 
-        .apple-progress-track {
+        .gain-progress-track {
             width: 100%;
             height: 6px;
-            background: #2C2C2E;
+            background: rgba(255, 255, 255, 0.06);
             border-radius: var(--radius-pill);
             overflow: hidden;
             margin-top: 1.2rem;
         }
 
-        .apple-progress-bar {
+        .gain-progress-bar {
             height: 100%;
             width: 0%;
-            background: linear-gradient(90deg, #0A84FF, #30D158);
+            background: linear-gradient(90deg, #632BFC, #5AED7C);
             border-radius: var(--radius-pill);
             transition: width 0.4s ease;
         }
@@ -309,80 +351,81 @@ HTML_TEMPLATE = """
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* KEYNOTE STATS GRID */
-        .stats-row {
+        /* STATS GRID */
+        .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
             margin: 2rem 0;
         }
 
-        .stat-box {
-            background: #FAFAFC;
-            padding: 1.5rem;
+        .stat-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--gain-border);
+            padding: 1.8rem;
             border-radius: 16px;
-            border: 1px solid var(--border-light);
             text-align: center;
         }
 
-        .stat-digit {
-            font-size: 2.5rem;
-            font-weight: 700;
+        .stat-val {
+            font-size: 2.6rem;
+            font-weight: 800;
             letter-spacing: -0.04em;
-            color: var(--text-primary);
+            color: #FFFFFF;
             line-height: 1.1;
         }
 
-        .stat-caption {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
+        .stat-lbl {
+            font-size: 0.78rem;
+            color: var(--gain-text-sub);
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.08em;
             margin-top: 0.4rem;
         }
 
-        /* APPLE DOWNLOAD BANNER */
+        /* DOWNLOAD BANNER */
         .download-box {
-            background: #F0FDF4;
-            border: 1px solid #BBF7D0;
+            background: rgba(99, 43, 252, 0.08);
+            border: 1px solid var(--gain-border-purple);
             border-radius: 18px;
-            padding: 2rem;
+            padding: 2.2rem;
             text-align: center;
             margin: 2rem 0;
         }
 
         .download-box h3 {
-            color: #14532D;
-            font-size: 1.25rem;
+            color: #FFFFFF;
+            font-size: 1.35rem;
             font-weight: 700;
             letter-spacing: -0.02em;
-            margin-bottom: 0.35rem;
+            margin-bottom: 0.4rem;
         }
 
         .download-box p {
-            color: #166534;
-            font-size: 0.92rem;
+            color: var(--gain-text-muted);
+            font-size: 0.95rem;
             margin-bottom: 1.5rem;
         }
 
-        /* SEARCH & TABLE */
+        /* TABLE */
         .search-field {
             width: 100%;
-            padding: 0.9rem 1.2rem;
+            padding: 0.95rem 1.4rem;
             border-radius: 12px;
-            border: 1px solid var(--border-card);
+            border: 1px solid var(--gain-border);
             font-size: 0.95rem;
             outline: none;
-            background: #FAFAFC;
+            background: rgba(255, 255, 255, 0.03);
+            color: #FFFFFF;
             margin-bottom: 1.5rem;
             transition: all 0.2s ease;
         }
 
         .search-field:focus {
-            background: #FFFFFF;
-            border-color: var(--apple-blue);
-            box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.1);
+            background: rgba(255, 255, 255, 0.06);
+            border-color: var(--gain-purple);
+            box-shadow: 0 0 0 3px rgba(99, 43, 252, 0.25);
         }
 
         table {
@@ -391,64 +434,65 @@ HTML_TEMPLATE = """
         }
 
         th, td {
-            padding: 1rem 1.2rem;
+            padding: 1.1rem 1.2rem;
             text-align: left;
-            border-bottom: 1px solid var(--border-light);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
             font-size: 0.92rem;
             vertical-align: middle;
         }
 
         th {
-            background: #FAFAFC;
-            color: var(--text-secondary);
+            background: rgba(255, 255, 255, 0.02);
+            color: var(--gain-text-sub);
             font-weight: 600;
             font-size: 0.78rem;
             text-transform: uppercase;
-            letter-spacing: 0.06em;
+            letter-spacing: 0.08em;
         }
 
-        tr:hover { background: #FAFAFC; }
+        tr:hover { background: rgba(255, 255, 255, 0.025); }
 
-        .apple-pill-badge {
-            padding: 0.3rem 0.8rem;
+        .pill-badge {
+            padding: 0.35rem 0.85rem;
             border-radius: var(--radius-pill);
             font-size: 0.78rem;
             font-weight: 600;
             display: inline-flex;
             align-items: center;
-            gap: 0.3rem;
+            gap: 0.35rem;
         }
 
-        .badge-verified { background: #E8F5E9; color: #1B5E20; }
-        .badge-spv { background: #FFF8E1; color: #B78103; }
+        .badge-verified { background: var(--gain-neon-green-bg); color: var(--gain-neon-green); border: 1px solid rgba(90, 237, 124, 0.25); }
+        .badge-spv { background: rgba(251, 191, 36, 0.1); color: #FBBF24; border: 1px solid rgba(251, 191, 36, 0.25); }
 
         .company-url {
-            color: var(--apple-blue);
+            color: #7873FE;
             font-weight: 600;
             text-decoration: none;
+            word-break: break-all;
         }
 
-        .company-url:hover { text-decoration: underline; }
+        .company-url:hover { text-decoration: underline; color: #A6A9FF; }
 
         .sec-pill {
             display: inline-block;
             margin-top: 4px;
-            background: #EFF6FF;
-            color: #1D4ED8;
+            background: rgba(99, 43, 252, 0.2);
+            color: #CED1FF;
             font-size: 0.72rem;
             font-weight: 700;
             padding: 2px 8px;
             border-radius: 4px;
-            border: 1px solid #BFDBFE;
+            border: 1px solid rgba(99, 43, 252, 0.4);
             text-decoration: none;
         }
 
         .alert-toast {
-            background-color: #FEF2F2;
-            color: #991B1B;
+            background-color: rgba(239, 68, 68, 0.15);
+            color: #FCA5A5;
             padding: 1rem 1.5rem;
             border-radius: 12px;
-            border: 1px solid #FECACA;
+            border: 1px solid rgba(239, 68, 68, 0.3);
             margin-bottom: 1.5rem;
             text-align: center;
             font-weight: 600;
@@ -458,64 +502,64 @@ HTML_TEMPLATE = """
 </head>
 <body>
 
-    <!-- APPLE FROSTED NAVIGATION -->
+    <!-- GAIN.AI TOP NAVIGATION -->
     <nav>
-        <a href="/" class="nav-logo">
-            <span>FindWeb</span>
-            <span class="nav-badge">Intelligence</span>
+        <a href="/" class="nav-brand">
+            Gain<span class="dot">.ai</span>
         </a>
-        <div style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">
-            Institutional Portfolio Verification
+        <div class="nav-tag">
+            Private Market Intelligence
         </div>
     </nav>
 
-    <!-- APPLE HERO HEADER -->
+    <!-- HERO HEADER -->
     <div class="hero">
-        <h1>Portfolio Intelligence. Verified.</h1>
-        <p>Institutional parent brand unravelling, U.S. SEC EDGAR filings, and European statutory registry triage.</p>
+        <div class="hero-badge">⚡ Institutional Credit & Private Equity Intelligence</div>
+        <h1>Develop a view on <span class="gradient-text">private companies in minutes</span></h1>
+        <p>Deep M&A operating brand resolution, U.S. SEC EDGAR filings, and European statutory registry triage.</p>
     </div>
 
     <div class="container">
-        <div class="apple-card">
-            <div id="errorAlert" class="alert-toast">⚠️ Please choose an Excel (.xlsx) or CSV (.csv) file first.</div>
+        <div class="gain-card">
+            <div id="errorAlert" class="alert-toast">⚠️ Please select a valid Excel (.xlsx) or CSV (.csv) portfolio dataset.</div>
 
-            <!-- UPLOAD DROPZONE -->
+            <!-- DROPZONE -->
             <div class="upload-dropzone" onclick="document.getElementById('fileInput').click()">
-                <div class="upload-icon">📂</div>
+                <div class="upload-icon">✨</div>
                 <div class="upload-title" id="uploadLabel">Drop your portfolio dataset here</div>
                 <div class="upload-subtitle">Supports Microsoft Excel (.xlsx, .xls) and CSV (.csv)</div>
-                <button type="button" class="btn-browse-file" onclick="event.stopPropagation(); document.getElementById('fileInput').click();">Choose File</button>
+                <button type="button" class="btn-browse-file" onclick="event.stopPropagation(); document.getElementById('fileInput').click();">Browse File</button>
                 <input type="file" id="fileInput" name="file" accept=".xlsx, .xls, .csv" onchange="updateFileName()">
             </div>
 
-            <!-- MASTER ACTION BUTTON -->
+            <!-- ACTION BUTTON -->
             <div class="btn-center-wrapper">
-                <button type="button" id="startExtractionBtn" class="btn-apple" style="width: 100%; max-width: 420px;" onclick="startAsyncEnrichment()">
-                    Scrape & Enrich Portfolio
+                <button type="button" id="startExtractionBtn" class="btn-gain-primary" style="width: 100%; max-width: 440px;" onclick="startAsyncEnrichment()">
+                    🚀 Scrape & Enrich Portfolio Dataset
                 </button>
             </div>
 
-            <!-- macOS TERMINAL CONSOLE -->
-            <div id="terminalContainer" class="macos-terminal">
-                <div class="macos-header">
-                    <div class="traffic-lights">
-                        <div class="light light-red"></div>
-                        <div class="light light-yellow"></div>
-                        <div class="light light-green"></div>
+            <!-- LIVE EXECUTION TERMINAL -->
+            <div id="terminalContainer" class="terminal-box">
+                <div class="terminal-header">
+                    <div class="terminal-dots">
+                        <div class="tdot tdot-red"></div>
+                        <div class="tdot tdot-yellow"></div>
+                        <div class="tdot tdot-green"></div>
                     </div>
-                    <div class="terminal-status-text">Hermes AI Engine — Live Execution</div>
-                    <div id="terminalPct" style="color: #30D158; font-family: 'Fira Code', monospace; font-size: 0.85rem; font-weight: 600;">0%</div>
+                    <div class="terminal-title">Gain.ai Intelligence Engine — Live Stream</div>
+                    <div id="terminalPct" style="color: var(--gain-neon-green); font-family: 'Fira Code', monospace; font-size: 0.85rem; font-weight: 700;">0%</div>
                 </div>
                 <div id="terminalLogs" class="terminal-content">
-                    <div class="log-row"><span class="log-timestamp">[SYSTEM]</span> <span class="log-tag">[INIT]</span> Initializing Hermes Intelligence Subsystems...</div>
+                    <div class="log-row"><span class="log-time">[SYSTEM]</span> <span class="log-tag">[INIT]</span> Initializing Gain.ai Multi-Tier Intelligence Subsystems...</div>
                 </div>
-                <div class="apple-progress-track">
-                    <div id="progressBarFill" class="apple-progress-bar"></div>
+                <div class="gain-progress-track">
+                    <div id="progressBarFill" class="gain-progress-bar"></div>
                 </div>
             </div>
         </div>
 
-        <!-- DYNAMIC RESULTS VIEW -->
+        <!-- DYNAMIC RESULTS -->
         <div id="resultsContainer" style="display: none;"></div>
     </div>
 
@@ -526,7 +570,7 @@ HTML_TEMPLATE = """
             const input = document.getElementById('fileInput');
             if (input.files.length > 0) {
                 selectedFile = input.files[0];
-                document.getElementById('uploadLabel').innerHTML = "Selected: <strong>" + selectedFile.name + "</strong>";
+                document.getElementById('uploadLabel').innerHTML = "Selected: <strong style='color:#FFFFFF;'>" + selectedFile.name + "</strong>";
                 document.getElementById('errorAlert').style.display = 'none';
             }
         }
@@ -540,7 +584,7 @@ HTML_TEMPLATE = """
             const container = document.getElementById('terminalLogs');
             const div = document.createElement('div');
             div.className = 'log-row';
-            div.innerHTML = `<span class="log-timestamp">[${getTime()}]</span> <span class="${tagClass}">[${tag}]</span> ${text}`;
+            div.innerHTML = `<span class="log-time">[${getTime()}]</span> <span class="${tagClass}">[${tag}]</span> ${text}`;
             container.appendChild(div);
             container.scrollTop = container.scrollHeight;
         }
@@ -563,7 +607,7 @@ HTML_TEMPLATE = """
             
             term.style.display = 'block';
             btn.disabled = true;
-            btn.innerText = 'Enriching Portfolio...';
+            btn.innerText = '⏳ Enriching Dataset (Please Wait)...';
 
             addLog('UPLOAD', 'log-tag', 'Loaded <strong>' + file.name + '</strong> (' + Math.round(file.size/1024) + ' KB)');
             setProgress(15);
@@ -572,7 +616,7 @@ HTML_TEMPLATE = """
             formData.append('file', file);
 
             const t1 = setTimeout(() => { addLog('CACHE', 'log-tag', 'Querying 2,598 Master Entity Database...'); setProgress(25); }, 1200);
-            const t2 = setTimeout(() => { addLog('SEC_EDGAR', 'log-sec', 'Triangulating with 18,164 SEC-registered public corporations & CIK database...'); setProgress(45); }, 2800);
+            const t2 = setTimeout(() => { addLog('SEC_EDGAR', 'log-sec', 'Triangulating with 18,164 SEC-registered public corporations & CIKs...'); setProgress(45); }, 2800);
             const t3 = setTimeout(() => { addLog('GEMINI', 'log-tag', 'Dispatching parallel batch reasoning across Gemini 3.5 Flash...'); setProgress(65); }, 4800);
             const t4 = setTimeout(() => { addLog('SEARCH', 'log-tag', 'Google Custom Search Engine resolving live parent brands...'); setProgress(80); }, 7000);
             const t5 = setTimeout(() => { addLog('WATCHDOG', 'log-watchdog', 'Hermes Watchdog inspecting rows & auto-healing SPV debt tranches...'); setProgress(92); }, 9500);
@@ -587,20 +631,20 @@ HTML_TEMPLATE = """
 
                 const data = await response.json();
                 if (data.status === 'success') {
-                    addLog('SUCCESS', 'log-success', 'Enrichment complete! Processed ' + data.summary.unique_companies + ' unique entities.');
+                    addLog('SUCCESS', 'log-success', 'Enrichment complete! Successfully mapped ' + data.summary.unique_companies + ' unique entities.');
                     setProgress(100);
-                    btn.innerText = 'Extraction Complete';
+                    btn.innerText = '✅ Extraction Complete';
                     renderResults(data);
                 } else {
                     addLog('ERROR', 'log-tag', 'Notice: ' + (data.error || 'Failed to process file.'));
                     btn.disabled = false;
-                    btn.innerText = 'Scrape & Enrich Portfolio';
+                    btn.innerText = '🚀 Scrape & Enrich Portfolio Dataset';
                 }
             } catch (err) {
                 clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); clearTimeout(t5);
                 addLog('ERROR', 'log-tag', 'Network error: ' + err.message);
                 btn.disabled = false;
-                btn.innerText = 'Scrape & Enrich Portfolio';
+                btn.innerText = '🚀 Scrape & Enrich Portfolio Dataset';
             }
         }
 
@@ -610,16 +654,16 @@ HTML_TEMPLATE = """
             let tableRows = '';
             data.preview.forEach(row => {
                 const isHttp = row['find web'] && row['find web'].startsWith('http');
-                const webHtml = isHttp ? `<a href="${row['find web']}" target="_blank" class="company-url">${row['find web']}</a>` : `<span style="color: var(--text-tertiary); font-size: 0.85rem;">${row['find web']}</span>`;
-                const badgeHtml = isHttp ? `<span class="apple-pill-badge badge-verified">Verified 200 OK</span>` : `<span class="apple-pill-badge badge-spv">Shell / SPV</span>`;
+                const webHtml = isHttp ? `<a href="${row['find web']}" target="_blank" class="company-url">${row['find web']}</a>` : `<span style="color: var(--gain-text-muted); font-size: 0.85rem;">${row['find web']}</span>`;
+                const badgeHtml = isHttp ? `<span class="pill-badge badge-verified">✅ Verified 200 OK</span>` : `<span class="pill-badge badge-spv">⚠️ Shell / SPV</span>`;
                 const secBadge = (row.Stock_Ticker && row.Stock_Ticker !== 'Not Found') ? 
                     `<a href="${row.SEC_EDGAR_CIK_URL}" target="_blank" class="sec-pill">🏛️ SEC: ${row.Stock_Ticker} (${row.SEC_CIK})</a>` : '';
 
                 tableRows += `
                     <tr>
-                        <td style="color: var(--text-tertiary); font-weight: 500;">${row.row_num}</td>
+                        <td style="color: var(--gain-text-muted); font-weight: 500;">${row.row_num}</td>
                         <td>
-                            <strong style="color: var(--text-primary); font-size: 0.95rem;">${row.company_name}</strong>
+                            <strong style="color: #FFFFFF; font-size: 0.95rem;">${row.company_name}</strong>
                             ${secBadge ? '<br>' + secBadge : ''}
                         </td>
                         <td>${webHtml}</td>
@@ -632,41 +676,41 @@ HTML_TEMPLATE = """
             });
 
             container.innerHTML = `
-                <div class="apple-card">
-                    <h2 style="font-size: 1.75rem; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 0.25rem;">Executive Summary Report</h2>
-                    <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1.5rem;">Audited & Verified by <strong>Hermes AI Agent + Watchdog Supervisor</strong>.</p>
+                <div class="gain-card">
+                    <h2 style="font-size: 1.85rem; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 0.35rem;">Portfolio Intelligence Report</h2>
+                    <p style="color: var(--gain-text-muted); font-size: 0.95rem; margin-bottom: 1.8rem;">Audited & Verified by <strong>Gain.ai + Hermes Watchdog Engine</strong>.</p>
                     
-                    <div class="stats-row">
-                        <div class="stat-box">
-                            <div class="stat-digit">${data.summary.total_rows}</div>
-                            <div class="stat-caption">Total Tranches</div>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-val">${data.summary.total_rows}</div>
+                            <div class="stat-lbl">Total Tranches</div>
                         </div>
-                        <div class="stat-box">
-                            <div class="stat-digit">${data.summary.unique_companies}</div>
-                            <div class="stat-caption">Operating Entities</div>
+                        <div class="stat-card">
+                            <div class="stat-val">${data.summary.unique_companies}</div>
+                            <div class="stat-lbl">Operating Entities</div>
                         </div>
-                        <div class="stat-box">
-                            <div class="stat-digit" style="color: var(--apple-green);">${data.summary.verified_pct}%</div>
-                            <div class="stat-caption">Verified Hit Rate</div>
+                        <div class="stat-card">
+                            <div class="stat-val" style="color: var(--gain-neon-green);">${data.summary.verified_pct}%</div>
+                            <div class="stat-lbl">Verified Hit Rate</div>
                         </div>
-                        <div class="stat-box">
-                            <div class="stat-digit" style="color: var(--apple-blue);">18</div>
-                            <div class="stat-caption">Enriched Fields</div>
+                        <div class="stat-card">
+                            <div class="stat-val" style="color: #A6A9FF;">18</div>
+                            <div class="stat-lbl">Enriched Fields</div>
                         </div>
                     </div>
 
-                    <!-- DOWNLOAD BOX -->
+                    <!-- DOWNLOAD BANNER -->
                     <div class="download-box">
-                        <h3>Download Enriched Portfolio Files</h3>
-                        <p>Verified native formatting for Apple Numbers, Microsoft Excel, and Google Sheets.</p>
-                        <div class="btn-center-wrapper" style="gap: 1rem; flex-wrap: wrap;">
-                            <a href="/download/csv" class="btn-apple btn-green">🍏 Download Apple Numbers CSV</a>
-                            <a href="/download/xlsx" class="btn-apple">📊 Download Excel Workbook (.xlsx)</a>
+                        <h3>Download Enriched Portfolio Datasets</h3>
+                        <p>Formatted natively for Apple Numbers, Microsoft Excel, and institutional pipelines.</p>
+                        <div class="btn-center-wrapper" style="gap: 1.2rem; flex-wrap: wrap;">
+                            <a href="/download/csv" class="btn-gain-primary btn-green-download">🍏 Download Apple Numbers CSV</a>
+                            <a href="/download/xlsx" class="btn-gain-primary">📊 Download Excel Workbook (.xlsx)</a>
                         </div>
                     </div>
 
                     <!-- SEARCH FIELD -->
-                    <input type="text" id="tableSearch" class="search-field" placeholder="Search company name, executive, sponsor, or city..." onkeyup="filterTable()">
+                    <input type="text" id="tableSearch" class="search-field" placeholder="🔍 Search company name, executive, PE sponsor, or city..." onkeyup="filterTable()">
 
                     <!-- DATA TABLE PREVIEW -->
                     <div style="overflow-x: auto;">
@@ -676,10 +720,10 @@ HTML_TEMPLATE = """
                                     <th>#</th>
                                     <th>Portfolio Entity</th>
                                     <th>Verified Website</th>
-                                    <th>Executive Leadership</th>
+                                    <th>Key Executive (CEO)</th>
                                     <th>PE Sponsor / Owner</th>
                                     <th>Headquarters</th>
-                                    <th>Status</th>
+                                    <th>Audit Status</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -810,7 +854,7 @@ def download_file(fmt):
 
 @app.route('/health')
 def health_check():
-    return jsonify({"status": "healthy", "service": "FindWeb Corporate Portfolio Intelligence"})
+    return jsonify({"status": "healthy", "service": "Gain.ai Private Market Intelligence"})
 
 def start_telegram_bot_daemon():
     token = os.environ.get("TELEGRAM_BOT_TOKEN", "8858180700:AAG8wT-nFBHTs907QQbl6R63rm8mDDslxxc").strip()
@@ -840,5 +884,5 @@ start_telegram_bot_daemon()
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 8080))
-    print(f"Starting FindWeb Intelligence Portal on port {port} ...", flush=True)
+    print(f"Starting Gain.ai Private Market Intelligence Portal on port {port} ...", flush=True)
     app.run(host='0.0.0.0', port=port, debug=False)
